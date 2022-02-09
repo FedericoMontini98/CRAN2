@@ -26,6 +26,7 @@ using namespace omnetpp;
 class RRH : public cSimpleModule
 {
     cMessage* timer_ = nullptr;
+    std::queue <PktMessage*> queue;
 
   protected:
     virtual void initialize();
