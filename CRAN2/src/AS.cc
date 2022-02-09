@@ -20,7 +20,7 @@ Define_Module(AS);
 void AS::initialize()
 {
     // TODO - Generated method body
-	error("Test")
+	error("Test");
 }
 
 void AS::handleMessage(cMessage *msg)

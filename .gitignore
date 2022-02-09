@@ -45,3 +45,4 @@ CRAN2/.cmdenv-log
 /.metadata/
 .project
 CRAN2/.cproject
+CRAN2/src/Makefile
