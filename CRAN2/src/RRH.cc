@@ -29,6 +29,9 @@ void RRH::handleMessage(cMessage *msg)
     if(msg->isSelfMessage()){
         //decompression ended
         forwardPkt(msg);
+
+        if(queue.size() > 0)
+            decompressPkt();
     }
     else{
         PktMessage* new_pkt = check_and_cast<PktMessage*>(msg);
@@ -42,6 +45,7 @@ void RRH::forwardPkt(cMessage *msg)
 {
     PktMessage* to_transmit = queue.front();
     queue.pop();
+    send(to_transmit, out);
 }
 
 void RRH::decompressPkt()
