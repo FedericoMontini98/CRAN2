@@ -31,13 +31,15 @@
 *.out
 *.app
 
-/out/*
-/simulations/.qtenvrc
-/simulations/.cmdenv-log
-/simulations/*.anf
-/simulations/*.csv
-/simulations/results/*
-.settings/
-/src/CRan
-/.computed/
+CRAN2/out/*
+CRAN2/simulations/.qtenvrc
+CRAN2/simulations/.cmdenv-log
+CRAN2/simulations/*.anf
+CRAN2/simulations/*.csv
+CRAN2/simulations/results/*
+CRAN2/.settings/
+CRAN2/src/CRan
+CRAN2/.computed/
+CRAN2/.cmdenv-log
 .cmdenv-log
+/.metadata/
