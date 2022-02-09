@@ -32,14 +32,19 @@
 *.app
 
 CRAN2/out/*
+CRAN2/.cproject
+CRAN2/src/Makefile
 CRAN2/simulations/.qtenvrc
 CRAN2/simulations/.cmdenv-log
 CRAN2/simulations/*.anf
 CRAN2/simulations/*.csv
 CRAN2/simulations/results/*
 CRAN2/.settings/
-CRAN2/src/CRan
+CRAN2/src/PktMessage_m.*
 CRAN2/.computed/
 CRAN2/.cmdenv-log
 .cmdenv-log
 /.metadata/
+.project
+CRAN2/.cproject
+CRAN2/src/Makefile
