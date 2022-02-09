@@ -17,22 +17,23 @@
 #define __C_RAN2_BBU_H_
 
 #include <omnetpp.h>
-#include <queue>
+
+#include "PktMessage_m.h"
 
 using namespace omnetpp;
 
-/**
- * TODO - Generated class
- */
 class BBU : public cSimpleModule
 {
-    //std::queue <PktMessage*> pktQueue;
-    bool occupied;
+    //cPacketQueue queue;
+    /*cPacketQueue bbuPktQueue;
+    PktMessage *msg;*/
+    //bool interface_busy;
     simsignal_t pktInQueueSignal_;
 
   protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
+    virtual void finish();
 };
 
 #endif

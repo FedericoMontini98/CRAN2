@@ -19,8 +19,11 @@ Define_Module(BBU);
 
 void BBU::initialize()
 {
-    occupied = false;
+    //interface_busy = false;
     pktInQueueSignal_ = registerSignal("occupationQueue");
+    //msg = new PktMessage();
+    //msg->setByteLength(5);
+
 }
 
 void BBU::handleMessage(cMessage *msg)
