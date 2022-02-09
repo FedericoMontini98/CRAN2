@@ -19,6 +19,8 @@ simple AS
 {
     parameters:
         int N_target;	// target cells
+        double SizeMean;
+        int Size_Distribution;
  	gates:
         output out;
 }
