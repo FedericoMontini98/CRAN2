@@ -20,6 +20,7 @@ Define_Module(AS);
 void AS::initialize()
 {
     // TODO - Generated method body
+    blabla
 }
 
 void AS::handleMessage(cMessage *msg)
