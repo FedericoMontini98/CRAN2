@@ -18,7 +18,7 @@ package cran2;
 simple RRH
 {
     parameters:
-        
+        bool compression_used;
     gates:
         input in;	// from the BBU
         output out;	// towards the related cell
