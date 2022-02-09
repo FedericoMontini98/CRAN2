@@ -25,6 +25,8 @@ using namespace omnetpp;
  */
 class RRH : public cSimpleModule
 {
+    cMessage* timer_ = nullptr;
+
   protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
