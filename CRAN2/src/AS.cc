@@ -21,7 +21,7 @@ void AS::initialize()
 {
     // TODO - Generated method body
 	error("Test");
-	FedericoPuzza
+
 }
 
 void AS::handleMessage(cMessage *msg)
