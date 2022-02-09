@@ -23,6 +23,7 @@ module CellularSystem
     parameters:
         int N;
         double dr @unit(bps);// = default(10bps);
+        int compression_ratio;
         @display("bgb=887,280");
     gates:
         input in;	// from AS
