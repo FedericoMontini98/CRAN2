@@ -19,10 +19,23 @@ Define_Module(AS);
 
 void AS::initialize()
 {
-    // TODO - Generated method body
+    this->SizeMean=par("SizeMean");
+    if(s<0){
+        error("Error in  Size Mean Value Extraction: The value is negative");
+    }
+    pkt_generation_delay();
 }
 
 void AS::handleMessage(cMessage *msg)
 {
     // TODO - Generated method body
+}
+
+void AS::pkt_generation_delay(){
+    this->Generate= new cMessage();
+    int time;
+    if(par("Size_Distribution")==1){
+        time=exponential(this->SizeMean,);
+
+    }
 }

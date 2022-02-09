@@ -20,11 +20,17 @@
 
 using namespace omnetpp;
 
-/**
- * TODO - Generated class
- */
 class AS : public cSimpleModule
 {
+  //Mean values
+  double SizeMean=0;
+  //Message
+  cMessage *Generate;
+  PktMessage* pkt;
+
+  //Methods
+  void pkt_generation_delay();
+
   protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
