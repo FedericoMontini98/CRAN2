@@ -28,4 +28,6 @@ void Cell::handleMessage(cMessage *msg)
     simtime_t elapsed_time = simTime() - m->getEnqueue_time;
     emit(endToEndDelay, elapsed_time);
     //EV << elapsed_time;
+    delete m;
+    delete msg;
 }
