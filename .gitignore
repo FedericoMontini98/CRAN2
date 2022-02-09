@@ -47,3 +47,6 @@ CRAN2/src/PktMessage_m.h
 CRAN2/.cmdenv-log
 .cmdenv-log
 /.metadata/
+.project
+CRAN2/.cproject
+CRAN2/src/Makefile
