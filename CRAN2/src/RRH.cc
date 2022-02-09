@@ -31,24 +31,27 @@ void RRH::handleMessage(cMessage *msg)
         forwardPkt(msg);
     }
     else{
-        if(par("compression_used")){
-            decompressPkt(msg);
-        }
-        else{
-            scheduleAt(simTime(), timer_);
-        }
+        PktMessage* new_pkt = check_and_cast<PktMessage*>(msg);
+        queue.push(new_pkt);
+        if(queue.size() == 1)
+            decompressPkt();
     }
 }
 
 void RRH::forwardPkt(cMessage *msg)
 {
-
+    PktMessage* to_transmit = queue.front();
+    queue.pop();
 }
 
-void RRH::decompressPkt(cMessage *msg)
+void RRH::decompressPkt()
 {
-    PktMessage* m = check_and_cast<PktMessage*>(msg);
-    long long to_wait = 50 * par("compression_ratio");
-    simtime_t decompression_time = SimTime (to_wait, -3);
-    scheduleAt(simTime() + decompression_time,);
+    if(par("compression_used")){
+        long long to_wait = 50 * par("compression_ratio");
+        simtime_t decompression_time = SimTime (to_wait, -3);
+        scheduleAt(simTime() + decompression_time, timer_);
+    }
+    else{
+        scheduleAt(simTime(), timer_);
+    }
 }
