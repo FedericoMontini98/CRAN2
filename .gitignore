@@ -30,3 +30,14 @@
 *.exe
 *.out
 *.app
+
+/out/*
+/simulations/.qtenvrc
+/simulations/.cmdenv-log
+/simulations/*.anf
+/simulations/*.csv
+/simulations/results/*
+.settings/
+/src/CRan
+/.computed/
+.cmdenv-log
