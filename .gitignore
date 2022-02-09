@@ -43,3 +43,5 @@ CRAN2/.computed/
 CRAN2/.cmdenv-log
 .cmdenv-log
 /.metadata/
+.project
+CRAN2/.cproject
