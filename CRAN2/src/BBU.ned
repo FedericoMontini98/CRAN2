@@ -21,7 +21,16 @@ simple BBU
         //signals for statistics and other parameters
         
         @signal[occupationQueue];
-        @statistic[occupationQueueStat](source="pktInQueue"; record=vector);
+        @statistic[occupationQueueStat](source="occupationQueue"; record=vector);
+        
+        @signal[queueingTime];
+        @statistic[queueingTimeStat](source="queueingTime"; record=mean,vector);
+        
+        @signal[responseTime];
+        @statistic[responseTimeStat](source="responseTime"; record=max,vector);
+        
+        bool pkt_compression;
+        int compression_rate;
     gates:
         input in;	// input from the AS
         output out[];	// outputs towards the RRHs
