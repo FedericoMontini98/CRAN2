@@ -15,6 +15,6 @@
 
 packet PktMessage {
     int target_cell;
-    double size;
+    int size;
     simtime_t enqueue_time;
 }

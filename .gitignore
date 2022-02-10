@@ -40,10 +40,8 @@ CRAN2/simulations/*.anf
 CRAN2/simulations/*.csv
 CRAN2/simulations/results/*
 CRAN2/.settings/
-CRAN2/src/CRan
+CRAN2/src/PktMessage_m.*
 CRAN2/.computed/
-CRAN2/src/PktMessage_m.cc
-CRAN2/src/PktMessage_m.h
 CRAN2/.cmdenv-log
 .cmdenv-log
 /.metadata/
