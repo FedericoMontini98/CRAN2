@@ -20,9 +20,42 @@ Define_Module(RRH);
 void RRH::initialize()
 {
     // TODO - Generated method body
+    timer_ = new cMessage("timer");
 }
 
 void RRH::handleMessage(cMessage *msg)
 {
     // TODO - Generated method body
+    if(msg->isSelfMessage()){
+        //decompression ended
+        forwardPkt(msg);
+
+        if(queue.size() > 0)
+            decompressPkt();
+    }
+    else{
+        PktMessage* new_pkt = check_and_cast<PktMessage*>(msg);
+        queue.push(new_pkt);
+        if(queue.size() == 1)
+            decompressPkt();
+    }
+}
+
+void RRH::forwardPkt(cMessage *msg)
+{
+    PktMessage* to_transmit = queue.front();
+    queue.pop();
+    send(to_transmit, out);
+}
+
+void RRH::decompressPkt()
+{
+    if(par("compression_used")){
+        long long to_wait = 50 * par("compression_ratio");
+        simtime_t decompression_time = SimTime (to_wait, -3);
+        scheduleAt(simTime() + decompression_time, timer_);
+    }
+    else{
+        scheduleAt(simTime(), timer_);
+    }
 }
