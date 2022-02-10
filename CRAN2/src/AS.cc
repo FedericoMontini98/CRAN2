@@ -30,20 +30,39 @@ void AS::handleMessage(cMessage *msg)
 {
     //After the wait for the Generate to arrive (Is a signal that notice to the AS to generate a packet to send to the BBU)
     //I proceed to create and send it
-    this->pkt = new PktMessage();
+    int size;
+    //Generating a random amount of time to wait
+    if(par("Size_Distribution")==1){
+        size=exponential(this->SizeMean,/* Find a way to generate a seed */0);
+    }
+    else{
+        size=lognormal(this->SizeMean,/* Same*/0);
+    }
+    //I create a new packet with the specified ID, size and the cell to reach in the interval [0, N-1]
+    this->pkt = new PktMessage(this->curr_pkt_id++,size,intuniform(0,par("N")-1,0));
+    //I send the generated pkt
+    send(this->pkt);
+    //I proceed to wait another pkt generation cycle
+    generate_delay();
 }
 
-void AS::pkt_generation_delay(){
+void AS::generate_delay(){
     //I Create a msg
     this->Generate= new cMessage();
     int time;
     //Generating a random amount of time to wait
     if(par("Size_Distribution")==1){
-        time=exponential(this->SizeMean,/* Find a way to generate a seed */0);
+        time=exponential(this->TimeMean,/* Find a way to generate a seed */0);
     }
     else{
-        time=lognormal(this->SizeMean,/* Same*/0);
+        time=lognormal(this->TimeMean,/* Same*/0);
     }
     //I send to myself a msg to notify that i have to send a packet to the BBU
     scheduleAt(simTime()+ time, this->Generate);
+}
+
+//Function to stop the packet generation
+void AS::finish(){
+    cancelEvent(this->Generate);
+    cancelAndDelete(this->Generate);
 }

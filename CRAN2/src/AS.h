@@ -24,9 +24,12 @@ class AS : public cSimpleModule
 {
   //Mean values
   double SizeMean=0;
+  double TimeMean=0;
   //Message
   cMessage *Generate;
   PktMessage* pkt;
+  int curr_pkt_id=0;
+
 
   //Methods
   void pkt_generation_delay();
@@ -34,6 +37,7 @@ class AS : public cSimpleModule
   protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
+    virtual void finish();
 };
 
 #endif
