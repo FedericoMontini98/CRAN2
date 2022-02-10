@@ -28,6 +28,9 @@ class RRH : public cSimpleModule
     cMessage* timer_ = nullptr;
     std::queue <PktMessage*> queue;
 
+    void forwardPkt(cMesssage *msg);
+    void decompressPkt();
+
   protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
