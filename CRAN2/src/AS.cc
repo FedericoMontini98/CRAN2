@@ -20,10 +20,10 @@ Define_Module(AS);
 void AS::initialize()
 {
     this->SizeMean=par("SizeMean");
-    if(s<0){
+    if(this->SizeMean<0){
         error("Error in  Size Mean Value Extraction: The value is negative");
     }
-    pkt_generation_delay();
+    generate_delay();
 }
 
 void AS::handleMessage(cMessage *msg)
@@ -32,16 +32,18 @@ void AS::handleMessage(cMessage *msg)
     //I proceed to create and send it
     int size;
     //Generating a random amount of time to wait
-    if(par("Size_Distribution")==1){
+    if(par("Size_Distribution").doubleValue()==double(1)){
         size=exponential(this->SizeMean,/* Find a way to generate a seed */0);
     }
     else{
         size=lognormal(this->SizeMean,/* Same*/0);
     }
     //I create a new packet with the specified ID, size and the cell to reach in the interval [0, N-1]
-    this->pkt = new PktMessage(this->curr_pkt_id++,size,intuniform(0,par("N")-1,0));
+    this->pkt = new PktMessage();
+    this->pkt->setSize(size);
+    this->pkt->setTarget_cell(intuniform(0,par("N").intValue()-1,0));
     //I send the generated pkt
-    send(this->pkt);
+    send(this->pkt,"out");
     //I proceed to wait another pkt generation cycle
     generate_delay();
 }
@@ -51,7 +53,7 @@ void AS::generate_delay(){
     this->Generate= new cMessage();
     int time;
     //Generating a random amount of time to wait
-    if(par("Size_Distribution")==1){
+    if(par("Size_Distribution").doubleValue()==double(1)){
         time=exponential(this->TimeMean,/* Find a way to generate a seed */0);
     }
     else{
