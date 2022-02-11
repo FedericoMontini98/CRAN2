@@ -20,7 +20,7 @@ simple BBU
     parameters:
         //signals for statistics and other parameters
         
-        @signal[occupationQueue];
+        @signal[occupationQueue](type=long);
         @statistic[occupationQueueStat](source="occupationQueue"; record=vector);
         
         @signal[queueingTime];

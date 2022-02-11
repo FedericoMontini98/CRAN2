@@ -24,9 +24,7 @@ using namespace omnetpp;
 
 class BBU : public cSimpleModule
 {
-    //cPacketQueue queue;
     cPacketQueue *pkt_queue;
-    PktMessage *sending_pkt;
     cChannel *tx_channel;
     cMessage *msg_timer;
 
@@ -43,6 +41,7 @@ class BBU : public cSimpleModule
 
     int compressPacket(cPacket *pkt);
     void handleNewMessage(cMessage *msg);
+    void sendPacket(cMessage *pkt);
 };
 
 #endif
