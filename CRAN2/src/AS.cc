@@ -47,7 +47,7 @@ void AS::handleMessage(cMessage *msg)
     //I create a new packet with size and the cell to reach in the interval [0, N-1]
     PktMessage* pkt = new PktMessage();
     pkt->setByteLength(size);
-    pkt->setTarget_cell(intuniform(0,par("N").intValue()-1,0));
+    pkt->setTarget_cell(intuniform(0,par("N_target").intValue()-1,0));
     //I send the generated pkt on the "out" link, also the only one available
     send(pkt,"out");
     //I proceed to wait another pkt generation cycle

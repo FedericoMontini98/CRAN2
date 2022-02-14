@@ -19,9 +19,12 @@ Define_Module(BBU);
 
 void BBU::initialize()
 {
-    tx_channel = gate("out")->getTransmissionChannel();
+    tx_channel = NULL;  //gate("out")->getTransmissionChannel();
+    pkt_queue = new cPacketQueue();
     msg_timer = new cMessage();
+    in_transit = NULL;
     gate_size = gateSize("out");
+    EV << gate_size << " gate_size" << endl;
 
     occupation_queue_ = registerSignal("occupationQueue");
     queueing_time_ = registerSignal("queueingTime");
@@ -31,10 +34,10 @@ void BBU::initialize()
 
 void BBU::handleMessage(cMessage *msg)
 {
-    if(msg->isSelfMessage() && !pkt_queue->isEmpty()) {
+    if(msg->isSelfMessage()) {
         // extract packet from queue and send
-        if(!tx_channel->isBusy()) {
-            cPacket *pkt = pkt_queue->pop();
+        if(pkt_queue->getLength() > 0) {
+            cPacket *pkt= pkt_queue->pop();
             sendPacket(pkt);
         } else {
             scheduleAt(tx_channel->getTransmissionFinishTime(), msg_timer);
@@ -47,13 +50,15 @@ void BBU::handleMessage(cMessage *msg)
         pkt->setEnqueue_time(enqueue_time);
 
         // the packet is queued only if the transmitted channel is busy or there are other packets in the queue
-        if(tx_channel->isBusy() || !pkt_queue->isEmpty()) {
+        if(in_transit != NULL) {
             pkt_queue->insert(pkt);
         } else {
             // idle channel and empty queue
+            in_transit = pkt;
             sendPacket(pkt);
         }
-        emit(occupation_queue_, (long)(pkt_queue->getByteLength()));
+        //long long queue_length = (long long)(pkt_queue->getByteLength());
+        //emit(occupation_queue_, queue_length);
     }
 }
 
@@ -72,17 +77,20 @@ int BBU::compressPacket(cPacket *pkt) {
 
 void BBU::sendPacket(cMessage *msg) {
     PktMessage *pkt = check_and_cast<PktMessage*>(msg);
+    in_transit = pkt;
+
+    int index_gate = pkt->getTarget_cell();
+    EV << index_gate << " index gate" << endl;
+    if(index_gate < 0 || index_gate >= gate_size) {
+        error("BBU: no corresponding target gate");
+    }
+
+    tx_channel = gate("out", index_gate)->getTransmissionChannel();
 
     simtime_t queueing_t = simTime() - pkt->getTimestamp();
     emit(queueing_time_, queueing_t);
     simtime_t response_t = queueing_t + tx_channel->calculateDuration(pkt);
     //emit(response_time_, response_t);
-
-    int index_gate = pkt->getTarget_cell();
-    EV << index_gate << " index" << endl;
-    if(index_gate < 0 || index_gate >= gate_size) {
-        error("BBU: no corresponding target gate");
-    }
 
     if(par("compression_used").boolValue()) {
         int new_size = compressPacket(pkt);
