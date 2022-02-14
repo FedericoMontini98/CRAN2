@@ -31,7 +31,7 @@ class RRH : public cSimpleModule
     std::queue <PktMessage*> queue;
 
     void forwardPkt();
-    void decompressPkt();
+    void decompressPkt(PktMessage *pkt);
 
   protected:
     virtual void initialize();

@@ -30,7 +30,8 @@ class AS : public cSimpleModule
   //Mean values
   double sizeMean=0;
   double timeMean=0;
-  //Message
+
+  //Message to notify to the AS to start another packet generation
   cMessage *generate;
 
 
