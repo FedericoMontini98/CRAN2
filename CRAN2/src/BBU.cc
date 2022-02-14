@@ -31,11 +31,13 @@ void BBU::initialize()
 
 void BBU::handleMessage(cMessage *msg)
 {
-    if(msg->isSelfMessage()) {
+    if(msg->isSelfMessage() && !pkt_queue->isEmpty()) {
         // extract packet from queue and send
-        if(!tx_channel->isBusy() && !pkt_queue->isEmpty()) {
+        if(!tx_channel->isBusy()) {
             cPacket *pkt = pkt_queue->pop();
             sendPacket(pkt);
+        } else {
+            scheduleAt(tx_channel->getTransmissionFinishTime(), msg_timer);
         }
     } else {
         // new packet from AS
@@ -87,13 +89,9 @@ void BBU::sendPacket(cMessage *msg) {
     }
 
     send(pkt, "out", index_gate);
+    scheduleAt(tx_channel->getTransmissionFinishTime(), msg_timer);
+
     emit(response_time_, response_t);
-    simtime_t tx_finish_time = tx_channel->getTransmissionFinishTime();
-    // TODO check condition and implement recursive function (?)
-    if(tx_finish_time < simTime()) {
-        tx_finish_time = simTime();
-    }
-    scheduleAt(tx_finish_time, msg_timer);
 }
 
 
