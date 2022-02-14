@@ -79,6 +79,7 @@ void BBU::sendPacket(cMessage *msg) {
     //emit(response_time_, response_t);
 
     int index_gate = pkt->getTarget_cell();
+    EV << index_gate << " index" << endl;
     if(index_gate < 0 || index_gate >= gate_size) {
         error("BBU: no corresponding target gate");
     }
