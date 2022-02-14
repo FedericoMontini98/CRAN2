@@ -37,17 +37,22 @@ void BBU::handleMessage(cMessage *msg)
     if(msg->isSelfMessage()) {
         // extract packet from queue and send
         if(pkt_queue->getLength() > 0) {
-            cPacket *pkt= pkt_queue->pop();
-            sendPacket(pkt);
-        } else {
-            scheduleAt(tx_channel->getTransmissionFinishTime(), msg_timer);
+            if(!in_transit) {
+                cPacket *pkt= pkt_queue->pop();
+                sendPacket(pkt);
+            } else {
+                simtime_t timer_ = tx_channel->getTransmissionFinishTime();
+                if(timer_ < simTIme())
+                    timer_ = simTime();
+                scheduleAt(timer_, msg_timer);
+            }
         }
     } else {
         // new packet from AS
         PktMessage *pkt = check_and_cast<PktMessage*>(msg);
         pkt->setTimestamp();
-        simtime_t enqueue_time = simTime();
-        pkt->setEnqueue_time(enqueue_time);
+        //simtime_t enqueue_time = simTime();
+        //pkt->setEnqueue_time(enqueue_time);
 
         // the packet is queued only if the transmitted channel is busy or there are other packets in the queue
         if(in_transit != NULL) {
