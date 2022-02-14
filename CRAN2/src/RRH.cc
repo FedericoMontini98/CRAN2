@@ -14,7 +14,6 @@
 // 
 
 #include "RRH.h"
-
 Define_Module(RRH);
 
 void RRH::initialize()
@@ -28,7 +27,7 @@ void RRH::handleMessage(cMessage *msg)
     // TODO - Generated method body
     if(msg->isSelfMessage()){
         //decompression ended
-        forwardPkt(msg);
+        forwardPkt();
 
         if(queue.size() > 0)
             decompressPkt();
@@ -41,18 +40,18 @@ void RRH::handleMessage(cMessage *msg)
     }
 }
 
-void RRH::forwardPkt(cMessage *msg)
+void RRH::forwardPkt()
 {
     PktMessage* to_transmit = queue.front();
     queue.pop();
-    send(to_transmit, out);
+    send(to_transmit, "out");
 }
 
 void RRH::decompressPkt()
 {
     if(par("compression_used")){
-        long long to_wait = 50 * par("compression_ratio");
-        simtime_t decompression_time = SimTime (to_wait, -3);
+        long long to_wait = ((long long)50) * ((long long)par("compression_ratio"));
+        simtime_t decompression_time = SimTime(to_wait, (SimTimeUnit)-3);
         scheduleAt(simTime() + decompression_time, timer_);
     }
     else{

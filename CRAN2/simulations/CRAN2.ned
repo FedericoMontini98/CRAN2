@@ -30,6 +30,7 @@ network CRAN2
         }
         cellularSystem: CellularSystem {
             @display("p=194,234");
+            N = N_cells;
         }
     connections:
         as.out --> cellularSystem.in;

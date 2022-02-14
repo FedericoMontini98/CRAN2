@@ -21,15 +21,20 @@ import ned.DatarateChannel;
 module CellularSystem
 {
     parameters:
-        int N;
-        double dr @unit(bps);// = default(10bps);
+        int N = default(5);
+        bool compression_on = default(false);
+        int compression = default(0);
+        double dr @unit(bps) = default(1000bps);
+        
         int compression_ratio;
+
         @display("bgb=887,280");
     gates:
         input in;	// from AS
     submodules:
         bbu: BBU {
-            @display("p=98,139");
+            pkt_compression = compression_on;
+            compression_rate = compression;
         }
         rrh[N]: RRH {
             @display("p=431,139");
