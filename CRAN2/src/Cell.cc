@@ -24,9 +24,8 @@ void Cell::initialize()
 
 void Cell::handleMessage(cMessage *msg)
 {
-    simtime_t elapsed_time = simTime() - m->getTimestamp();
+    simtime_t elapsed_time = simTime() - msg->getTimestamp();
     emit(endToEndDelay_, elapsed_time);
     //EV << elapsed_time;
-    delete m;
     delete msg;
 }
