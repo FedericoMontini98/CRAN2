@@ -19,12 +19,52 @@ Define_Module(AS);
 
 void AS::initialize()
 {
-    // TODO - Generated method body
-	error("Test");
-
+    this->SizeMean=par("SizeMean");
+    if(this->SizeMean<0){
+        error("Error in  Size Mean Value Extraction: The value is negative");
+    }
+    generate_delay();
 }
 
 void AS::handleMessage(cMessage *msg)
 {
-    // TODO - Generated method body
+    //After the wait for the Generate to arrive (Is a signal that notice to the AS to generate a packet to send to the BBU)
+    //I proceed to create and send it
+    int size;
+    //Generating a random amount of time to wait
+    if(par("Size_Distribution").doubleValue()==double(1)){
+        size=exponential(this->SizeMean,/* Find a way to generate a seed */0);
+    }
+    else{
+        size=lognormal(this->SizeMean,/* Same*/0);
+    }
+    //I create a new packet with the specified ID, size and the cell to reach in the interval [0, N-1]
+    this->pkt = new PktMessage();
+    this->pkt->setSize(size);
+    this->pkt->setTarget_cell(intuniform(0,par("N").intValue()-1,0));
+    //I send the generated pkt
+    send(this->pkt,"out");
+    //I proceed to wait another pkt generation cycle
+    generate_delay();
+}
+
+void AS::generate_delay(){
+    //I Create a msg
+    this->Generate= new cMessage();
+    int time;
+    //Generating a random amount of time to wait
+    if(par("Size_Distribution").doubleValue()==double(1)){
+        time=exponential(this->TimeMean,/* Find a way to generate a seed */0);
+    }
+    else{
+        time=lognormal(this->TimeMean,/* Same*/0);
+    }
+    //I send to myself a msg to notify that i have to send a packet to the BBU
+    scheduleAt(simTime()+ time, this->Generate);
+}
+
+//Function to stop the packet generation
+void AS::finish(){
+    cancelEvent(this->Generate);
+    cancelAndDelete(this->Generate);
 }

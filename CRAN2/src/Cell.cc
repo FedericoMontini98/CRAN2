@@ -24,5 +24,10 @@ void Cell::initialize()
 
 void Cell::handleMessage(cMessage *msg)
 {
-    // TODO - Generated method body
+    PktMessage* m = check_and_cast<PktMessage*>(msg);
+    simtime_t elapsed_time = simTime() - m->getEnqueue_time;
+    emit(endToEndDelay, elapsed_time);
+    //EV << elapsed_time;
+    delete m;
+    delete msg;
 }

@@ -17,17 +17,27 @@
 #define __C_RAN2_AS_H_
 
 #include <omnetpp.h>
+#include "PktMessage_m.h"
 
 using namespace omnetpp;
 
-/**
- * TODO - Generated class
- */
 class AS : public cSimpleModule
 {
+  //Mean values
+  double SizeMean=0;
+  double TimeMean=0;
+  //Message
+  cMessage *Generate;
+  PktMessage* pkt;
+
+
+  //Methods
+  void generate_delay();
+
   protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
+    virtual void finish();
 };
 
 #endif
