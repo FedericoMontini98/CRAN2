@@ -24,20 +24,21 @@ module CellularSystem
         int N = default(5);
         bool compression_on = default(false);
         int compression = default(0);
-        double dr @unit(bps) = default(1000bps);
-        
-        int compression_ratio;
+        double dr @unit(bps) = default(0bps);
 
         @display("bgb=887,280");
     gates:
         input in;	// from AS
     submodules:
         bbu: BBU {
-            pkt_compression = compression_on;
-            compression_rate = compression;
+            compression_used = compression_on;
+            compression_ratio = compression;
+            @display("p=149.24251,138.105");
         }
         rrh[N]: RRH {
             @display("p=431,139");
+            compression_used = compression_on;
+            compression_ratio = compression;
         }
         cell[N]: Cell {
             @display("p=725,139");

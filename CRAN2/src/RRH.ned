@@ -19,6 +19,7 @@ simple RRH
 {
     parameters:
         bool compression_used;
+        int compression_ratio;
     gates:
         input in;	// from the BBU
         output out;	// towards the related cell
