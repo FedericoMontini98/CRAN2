@@ -42,6 +42,7 @@ class BBU : public cSimpleModule
     int compressPacket(cPacket *pkt);
     void handleNewMessage(cMessage *msg);
     void sendPacket(cMessage *pkt);
+
 };
 
 #endif
