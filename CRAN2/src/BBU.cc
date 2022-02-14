@@ -83,7 +83,7 @@ void BBU::sendPacket(cMessage *msg) {
         error("BBU: no corresponding target gate");
     }
 
-    if(par("pkt_compression").boolValue()) {
+    if(par("compression_used").boolValue()) {
         int new_size = compressPacket(pkt);
         EV << "size compressed: " << new_size << endl;
     }

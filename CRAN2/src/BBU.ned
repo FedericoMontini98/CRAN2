@@ -29,8 +29,8 @@ simple BBU
         @signal[responseTime];
         @statistic[responseTimeStat](source="responseTime"; record=max,vector);
         
-        bool pkt_compression;
-        int compression_rate;
+        bool compression_used;
+        int compression_ratio;
     gates:
         input in;	// input from the AS
         output out[];	// outputs towards the RRHs
