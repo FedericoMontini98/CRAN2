@@ -21,14 +21,13 @@ import ned.DatarateChannel;
 module CellularSystem
 {
     parameters:
-<<<<<<< HEAD
         int N = default(5);
         bool compression_on = default(false);
         int compression = default(0);
         double dr @unit(bps) = default(1000bps);
         
         int compression_ratio;
->>>>>>> origin/Emanuele
+
         @display("bgb=887,280");
     gates:
         input in;	// from AS

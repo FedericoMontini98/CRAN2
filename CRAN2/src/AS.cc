@@ -21,7 +21,7 @@ void AS::initialize()
 {
     this->SizeMean=par("SizeMean");
     if(this->SizeMean<0){
-        error("Error in  Size Mean Value Extraction: The value is negative");
+        error("Error in Size Mean Value Extraction: The value is negative");
     }
     generate_delay();
 }

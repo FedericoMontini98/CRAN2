@@ -93,7 +93,7 @@ void BBU::sendPacket(cMessage *msg) {
     if(tx_finish_time < simTime()) {
         tx_finish_time = simTime();
     }
-    scheduleAt(tx_channel->getTransmissionFinishTime(), msg_timer);
+    scheduleAt(tx_finish_time, msg_timer);
 }
 
 
