@@ -23,6 +23,10 @@ void AS::initialize()
     if(sizeMean<0){
         error("Error in  Size Mean Value Extraction: The value is negative");
     }
+    timeMean=par("timeMean");
+    if(timeMean<0){
+        error("Error in Time Mean Value Extraction: The value is negative");
+    }
     //I Create a msg
     this->generate= new cMessage();
     generate_delay();

@@ -21,6 +21,8 @@ simple AS
         int N_target;	// target cells
         double sizeMean;
         double sizeDistribution;
+        double timeMean;
+        double timeDistribution;
  	gates:
         output out;
 }
