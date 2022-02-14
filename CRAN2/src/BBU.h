@@ -33,7 +33,7 @@ class BBU : public cSimpleModule
   protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
-    virtual void finish();
+    //virtual void finish();
 };
 
 #endif

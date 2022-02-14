@@ -17,6 +17,8 @@
 #define __C_RAN2_RRH_H_
 
 #include <omnetpp.h>
+#include "PktMessage_m.h"
+#include <queue>
 
 using namespace omnetpp;
 
@@ -28,7 +30,7 @@ class RRH : public cSimpleModule
     cMessage* timer_ = nullptr;
     std::queue <PktMessage*> queue;
 
-    void forwardPkt(cMesssage *msg);
+    void forwardPkt();
     void decompressPkt();
 
   protected:
