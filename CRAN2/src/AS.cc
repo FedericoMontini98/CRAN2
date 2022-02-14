@@ -19,52 +19,53 @@ Define_Module(AS);
 
 void AS::initialize()
 {
-    this->SizeMean=par("SizeMean");
-    if(this->SizeMean<0){
+    sizeMean=par("sizeMean");
+    if(sizeMean<0){
         error("Error in  Size Mean Value Extraction: The value is negative");
     }
+    //I Create a msg
+    this->generate= new cMessage();
     generate_delay();
 }
 
+//Function that is activated after the waiting time. It needs to create and prepare a packet to send on the "out" link to the BBU
+//After the send is done will call generate_delay to have another wait time
 void AS::handleMessage(cMessage *msg)
 {
-    //After the wait for the Generate to arrive (Is a signal that notice to the AS to generate a packet to send to the BBU)
-    //I proceed to create and send it
     int size;
-    //Generating a random amount of time to wait
-    if(par("Size_Distribution").doubleValue()==double(1)){
-        size=exponential(this->SizeMean,/* Find a way to generate a seed */0);
+    //Generating a "random" size for the packet
+    if(par("sizeDistribution").doubleValue()==double(1)){
+        size=(int)exponential(sizeMean,SIZE_RNG);
     }
     else{
-        size=lognormal(this->SizeMean,/* Same*/0);
+        size=(int)lognormal(sizeMean,SIZE_RNG);
     }
-    //I create a new packet with the specified ID, size and the cell to reach in the interval [0, N-1]
-    this->pkt = new PktMessage();
-    this->pkt->setSize(size);
-    this->pkt->setTarget_cell(intuniform(0,par("N").intValue()-1,0));
-    //I send the generated pkt
-    send(this->pkt,"out");
+    //I create a new packet with size and the cell to reach in the interval [0, N-1]
+    PktMessage* pkt = new PktMessage();
+    pkt->setSize(size);
+    pkt->setTarget_cell(intuniform(0,par("N").intValue()-1,0));
+    //I send the generated pkt on the "out" link, also the only one available
+    send(pkt,"out");
     //I proceed to wait another pkt generation cycle
     generate_delay();
 }
 
+//Function that generate an amount of time to wait between the creation of two packets to send to the BBU
 void AS::generate_delay(){
-    //I Create a msg
-    this->Generate= new cMessage();
     int time;
-    //Generating a random amount of time to wait
-    if(par("Size_Distribution").doubleValue()==double(1)){
-        time=exponential(this->TimeMean,/* Find a way to generate a seed */0);
+    //Generating a "random" amount of time to wait
+    if(par("sizeDistribution").doubleValue()==double(1)){
+        time=(int)exponential(timeMean,TIME_RNG);
     }
     else{
-        time=lognormal(this->TimeMean,/* Same*/0);
+        time=(int)lognormal(timeMean,TIME_RNG);
     }
     //I send to myself a msg to notify that i have to send a packet to the BBU
-    scheduleAt(simTime()+ time, this->Generate);
+    scheduleAt(simTime()+ time, generate);
 }
 
 //Function to stop the packet generation
 void AS::finish(){
-    cancelEvent(this->Generate);
-    cancelAndDelete(this->Generate);
+    cancelEvent(generate);
+    cancelAndDelete(generate);
 }

@@ -21,14 +21,17 @@
 
 using namespace omnetpp;
 
+// Index of the Random Number Generators
+#define TIME_RNG     0
+#define SIZE_RNG     1
+
 class AS : public cSimpleModule
 {
   //Mean values
-  double SizeMean=0;
-  double TimeMean=0;
+  double sizeMean=0;
+  double timeMean=0;
   //Message
-  cMessage *Generate;
-  PktMessage* pkt;
+  cMessage *generate;
 
 
   //Methods
