@@ -51,7 +51,7 @@ void RRH::decompressPkt(PktMessage *pkt)
 {
     if(par("compression_used")){
         long long to_wait = ((long long)50) * ((long long)par("compression_ratio"));
-        pkt->setByteLength(pkt->getByteLength()/(100-(long long)par("compression_ratio")));
+        pkt->setByteLength(pkt->getByteLength()/(100 - par("compression_ratio").intValue()));
         simtime_t decompression_time = SimTime(to_wait, (SimTimeUnit)-3);
         scheduleAt(simTime() + decompression_time, timer_);
     }
