@@ -35,17 +35,21 @@ void BBU::initialize()
 void BBU::handleMessage(cMessage *msg)
 {
     if(msg->isSelfMessage()) {
+        in_transit = NULL;
         // extract packet from queue and send
+        EV << pkt_queue->getLength() << " -> length" << endl;
         if(pkt_queue->getLength() > 0) {
-            if(!in_transit) {
+            //if(!in_transit) {
+                EV << "Non in transito" << endl;
                 cPacket *pkt= pkt_queue->pop();
                 sendPacket(pkt);
-            } else {
+            /*} else {
+                EV << "In transito" << endl;
                 simtime_t timer_ = tx_channel->getTransmissionFinishTime();
                 if(timer_ < simTime())
                     timer_ = simTime();
                 scheduleAt(timer_, msg_timer);
-            }
+            }*/
         }
     } else {
         // new packet from AS
@@ -56,14 +60,16 @@ void BBU::handleMessage(cMessage *msg)
 
         // the packet is queued only if the transmitted channel is busy or there are other packets in the queue
         if(in_transit != NULL) {
+            EV << "Prova" << endl;
             pkt_queue->insert(pkt);
         } else {
+            EV << "b" << endl;
             // idle channel and empty queue
             in_transit = pkt;
             sendPacket(pkt);
         }
-        //long long queue_length = (long long)(pkt_queue->getByteLength());
-        //emit(occupation_queue_, queue_length);
+        long queue_length = static_cast<long>(pkt_queue->getByteLength());
+        emit(occupation_queue_, queue_length);
     }
 }
 
@@ -84,7 +90,7 @@ int BBU::compressPacket(cPacket *pkt) {
 void BBU::sendPacket(cMessage *msg) {
     PktMessage *pkt = check_and_cast<PktMessage*>(msg);
     in_transit = pkt;
-
+    EV<< "C" << endl;
     int index_gate = pkt->getTarget_cell();
     EV << index_gate << " index gate" << endl;
     if(index_gate < 0 || index_gate >= gate_size) {
@@ -96,7 +102,7 @@ void BBU::sendPacket(cMessage *msg) {
     simtime_t queueing_t = simTime() - pkt->getTimestamp();
     emit(queueing_time_, queueing_t);
     simtime_t response_t = queueing_t + tx_channel->calculateDuration(pkt);
-    //emit(response_time_, response_t);
+    EV << "time: " << response_t << endl;
 
     if(par("compression_used").boolValue()) {
         int new_size = compressPacket(pkt);
@@ -105,6 +111,8 @@ void BBU::sendPacket(cMessage *msg) {
 
     send(pkt, "out", index_gate);
     scheduleAt(tx_channel->getTransmissionFinishTime(), msg_timer);
+    //simtime_t time = SimTime(5, (SimTimeUnit)-3);
+    //scheduleAt(simTime() + time, msg_timer);
 
     emit(response_time_, response_t);
 }
