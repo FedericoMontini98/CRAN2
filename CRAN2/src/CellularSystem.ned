@@ -47,6 +47,6 @@ module CellularSystem
         in --> bbu.in;
         for i=0..N-1 {
             bbu.out++ --> {  datarate = dr; } --> rrh[i].in;
-            rrh[i].out --> cell[i].in;
+            cell[i].in <-- rrh[i].out;
         }
 }
