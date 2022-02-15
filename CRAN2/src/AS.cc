@@ -19,16 +19,16 @@ Define_Module(AS);
 
 void AS::initialize()
 {
-    sizeMean=par("sizeMean");
-    if(sizeMean<0){
+    sizeMean = par("sizeMean");
+    if(sizeMean < 0){
         error("Error in  Size Mean Value Extraction: The value is negative");
     }
-    timeMean=par("timeMean");
-    if(timeMean<0){
+    timeMean = par("timeMean");
+    if(timeMean < 0){
         error("Error in Time Mean Value Extraction: The value is negative");
     }
     //I Create a msg
-    this->generate= new cMessage();
+    this->generate = new cMessage();
     generate_delay();
 }
 
@@ -38,18 +38,18 @@ void AS::handleMessage(cMessage *msg)
 {
     int size;
     //Generating a "random" size for the packet
-    if(par("sizeDistribution").doubleValue()==double(1)){
-        size=(int)exponential(sizeMean,SIZE_RNG);
+    if(par("sizeDistribution").doubleValue() == double(1)){
+        size = (int)exponential(sizeMean, SIZE_RNG);
     }
     else{
-        size=(int)lognormal(sizeMean,SIZE_RNG);
+        size = (int)lognormal(sizeMean, SIZE_RNG);
     }
     //I create a new packet with size and the cell to reach in the interval [0, N-1]
     PktMessage* pkt = new PktMessage();
     pkt->setByteLength(size);
-    pkt->setTarget_cell(intuniform(0,par("N_target").intValue()-1,0));
+    pkt->setTarget_cell(intuniform(0, par("N_target").intValue()-1, 0));
     //I send the generated pkt on the "out" link, also the only one available
-    send(pkt,"out");
+    send(pkt, "out");
     //I proceed to wait another pkt generation cycle
     generate_delay();
 }
@@ -58,13 +58,8 @@ void AS::handleMessage(cMessage *msg)
 void AS::generate_delay(){
     simtime_t time;
     //Generating a "random" amount of time to wait
-    if(par("sizeDistribution").doubleValue()==double(1)){
-        time=(simtime_t)exponential(timeMean,TIME_RNG);
-    }
-    else{
-        time=(simtime_t)lognormal(timeMean,TIME_RNG);
-    }
-    time =  SimTime(5, (SimTimeUnit)-3);
+    time = (simtime_t)exponential(timeMean, TIME_RNG);
+
     //I send to myself a msg to notify that i have to send a packet to the BBU
     scheduleAt(simTime() + time, generate);
     EV << "generated time: " << time << endl;
