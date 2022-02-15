@@ -42,7 +42,7 @@ void BBU::handleMessage(cMessage *msg)
                 sendPacket(pkt);
             } else {
                 simtime_t timer_ = tx_channel->getTransmissionFinishTime();
-                if(timer_ < simTIme())
+                if(timer_ < simTime())
                     timer_ = simTime();
                 scheduleAt(timer_, msg_timer);
             }

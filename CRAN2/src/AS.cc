@@ -56,7 +56,7 @@ void AS::handleMessage(cMessage *msg)
 
 //Function that generate an amount of time to wait between the creation of two packets to send to the BBU
 void AS::generate_delay(){
-    int time;
+    int time=0;
     //Generating a "random" amount of time to wait
     if(par("sizeDistribution").doubleValue()==double(1)){
         time=(int)exponential(timeMean,TIME_RNG);
