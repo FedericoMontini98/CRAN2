@@ -27,6 +27,7 @@ network CRAN2
     submodules:
         as: AS {
             @display("p=194,65");
+            N_target = N_cells;
         }
         cellularSystem: CellularSystem {
             @display("p=194,234");
