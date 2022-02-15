@@ -71,6 +71,7 @@ void BBU::finish()
 {
     pkt_queue->clear();
     cancelAndDelete(msg_timer);
+    delete pkt_queue;
 }
 
 int BBU::compressPacket(cPacket *pkt) {
