@@ -35,17 +35,21 @@ void BBU::initialize()
 void BBU::handleMessage(cMessage *msg)
 {
     if(msg->isSelfMessage()) {
+        in_transit = NULL;
         // extract packet from queue and send
+        EV << pkt_queue->getLength() << " -> length" << endl;
         if(pkt_queue->getLength() > 0) {
-            if(!in_transit) {
+            //if(!in_transit) {
+                EV << "Non in transito" << endl;
                 cPacket *pkt= pkt_queue->pop();
                 sendPacket(pkt);
-            } else {
+            /*} else {
+                EV << "In transito" << endl;
                 simtime_t timer_ = tx_channel->getTransmissionFinishTime();
                 if(timer_ < simTime())
                     timer_ = simTime();
                 scheduleAt(timer_, msg_timer);
-            }
+            }*/
         }
     } else {
         // new packet from AS
@@ -64,8 +68,8 @@ void BBU::handleMessage(cMessage *msg)
             in_transit = pkt;
             sendPacket(pkt);
         }
-        //long long queue_length = (long long)(pkt_queue->getByteLength());
-        //emit(occupation_queue_, queue_length);
+        long queue_length = static_cast<long>(pkt_queue->getByteLength());
+        emit(occupation_queue_, queue_length);
     }
 }
 
@@ -97,7 +101,6 @@ void BBU::sendPacket(cMessage *msg) {
     simtime_t queueing_t = simTime() - pkt->getTimestamp();
     emit(queueing_time_, queueing_t);
     simtime_t response_t = queueing_t + tx_channel->calculateDuration(pkt);
-    //emit(response_time_, response_t);
     EV << "time: " << response_t << endl;
 
     if(par("compression_used").boolValue()) {
@@ -106,9 +109,9 @@ void BBU::sendPacket(cMessage *msg) {
     }
 
     send(pkt, "out", index_gate);
-    //scheduleAt(tx_channel->getTransmissionFinishTime(), msg_timer);
-    simtime_t time = SimTime(5, (SimTimeUnit)-3);
-    scheduleAt(simTime() + time, msg_timer);
+    scheduleAt(tx_channel->getTransmissionFinishTime(), msg_timer);
+    //simtime_t time = SimTime(5, (SimTimeUnit)-3);
+    //scheduleAt(simTime() + time, msg_timer);
 
     emit(response_time_, response_t);
 }
