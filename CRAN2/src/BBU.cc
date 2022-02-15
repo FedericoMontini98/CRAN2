@@ -51,7 +51,7 @@ void BBU::handleMessage(cMessage *msg)
         pkt->setTimestamp();
 
         // the packet is queued only if the transmitted channel is busy or there are other packets in the queue
-        if(in_transit) {
+        if(in_transit || !pkt_queue->isEmpty()) {
             pkt_queue->insert(pkt);
         } else {
             // idle channel and empty queue

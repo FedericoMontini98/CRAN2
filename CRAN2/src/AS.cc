@@ -42,12 +42,13 @@ void AS::handleMessage(cMessage *msg)
         size = (int)exponential(sizeMean, SIZE_RNG);
     }
     else{
+        // TODO adding variance
         size = (int)lognormal(sizeMean, SIZE_RNG);
     }
     //I create a new packet with size and the cell to reach in the interval [0, N-1]
     PktMessage* pkt = new PktMessage();
     pkt->setByteLength(size);
-    pkt->setTarget_cell(intuniform(0, par("N_target").intValue()-1, 0));
+    pkt->setTarget_cell(intuniform(0, par("N_target").intValue()-1, TARGET_RNG));
     //I send the generated pkt on the "out" link, also the only one available
     send(pkt, "out");
     //I proceed to wait another pkt generation cycle

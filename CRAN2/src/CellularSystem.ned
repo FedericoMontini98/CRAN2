@@ -24,7 +24,7 @@ module CellularSystem
         int N = default(5);
         bool compression_on = default(false);
         double compression_rate = default(0);
-        double dr @unit(kbps) = default(0kbps);
+        double dr @unit(kbps) = default(5kbps);
 
         @display("bgb=887,280");
     gates:

@@ -42,6 +42,16 @@ void RRH::handleMessage(cMessage *msg)
     }
 }
 
+void RRH::finish() {
+    cancelAndDelete(timer_);
+
+    while (!queue.empty()) {
+        PktMessage *pkt = queue.front();
+        queue.pop();
+        delete pkt;
+    }
+}
+
 void RRH::forwardPkt()
 {
     PktMessage *to_transmit = queue.front();

@@ -24,6 +24,7 @@ using namespace omnetpp;
 // Index of the Random Number Generators
 #define TIME_RNG     0
 #define SIZE_RNG     1
+#define TARGET_RNG     2
 
 class AS : public cSimpleModule
 {
