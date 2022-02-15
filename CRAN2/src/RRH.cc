@@ -52,7 +52,7 @@ void RRH::forwardPkt()
 void RRH::decompressPkt(PktMessage *pkt)
 {
     if(par("compression_used")){
-        long long to_wait = ((long long)50) * ((long long)par("compression_ratio"));
+        int64_t to_wait = ((int64_t)50) * ((int64_t)par("compression_ratio").intValue());
         pkt->setByteLength(pkt->getByteLength() / ((100 - par("compression_ratio").intValue()) / 100));
         simtime_t decompression_time = SimTime(to_wait, (SimTimeUnit)-3);
         scheduleAt(simTime() + decompression_time, timer_);
