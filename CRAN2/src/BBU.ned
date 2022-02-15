@@ -30,7 +30,7 @@ simple BBU
         @statistic[responseTimeStat](source="responseTime"; record=max,vector);
         
         bool compression_used;
-        int compression_ratio;
+        double compression_ratio;
     gates:
         input in;	// input from the AS
         output out[];	// outputs towards the RRHs

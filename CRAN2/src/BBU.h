@@ -27,7 +27,7 @@ class BBU : public cSimpleModule
     cPacketQueue *pkt_queue;
     cChannel *tx_channel;
     cMessage *msg_timer;
-    PktMessage *in_transit;
+    bool in_transit;
 
     int gate_size;
 

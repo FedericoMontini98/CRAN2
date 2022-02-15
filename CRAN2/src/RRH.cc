@@ -35,7 +35,6 @@ void RRH::handleMessage(cMessage *msg)
         }
     }
     else{
-        EV << "D" << endl;
         PktMessage* new_pkt = check_and_cast<PktMessage*>(msg);
         queue.push(new_pkt);
         if(queue.size() == 1)
@@ -53,8 +52,10 @@ void RRH::forwardPkt()
 void RRH::decompressPkt(PktMessage *pkt)
 {
     if(par("compression_used").boolValue()){
-        int64_t to_wait = ((int64_t)50) * ((int64_t)par("compression_ratio").intValue());
-        pkt->setByteLength(pkt->getByteLength() / ((100 - par("compression_ratio").intValue()) / 100));
+        int64_t to_wait = ((int64_t)50) * ((int64_t)par("compression_ratio").doubleValue());
+        int new_size = ceil(pkt->getByteLength() / (1 - par("compression_ratio").doubleValue() / 100));
+        pkt->setByteLength(new_size);
+
         simtime_t decompression_time = SimTime(to_wait, (SimTimeUnit)-3);
         scheduleAt(simTime() + decompression_time, timer_);
     }
