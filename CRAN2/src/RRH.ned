@@ -18,6 +18,16 @@ package cran2;
 simple RRH
 {
     parameters:
+        
+        //@signal[occupationQueue](type=long);
+        //@statistic[occupationQueueStat](source="occupationQueue"; record=mean,vector);
+        
+        @signal[queueingTime];
+        @statistic[queueingTimeStat](source="queueingTime"; record=mean,vector);
+        
+        @signal[responseTime];
+        @statistic[responseTimeStat](source="responseTime"; record=mean,vector);
+        
         bool compression_used;
         double compression_ratio;
     gates:

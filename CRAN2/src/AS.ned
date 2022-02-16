@@ -21,7 +21,7 @@ simple AS
         int N_target;	// target cells
         
         double sizeMean = default(1);
-        double sizeVariance = default(1);
+        double sizeVariance = default(0.1);
         int sizeDistribution = default(1);
         
         double timeMean = default(1);

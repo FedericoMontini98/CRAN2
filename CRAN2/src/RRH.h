@@ -30,6 +30,10 @@ class RRH : public cSimpleModule
     cMessage* timer_ = nullptr;
     std::queue <PktMessage*> queue;
 
+    //simsignal_t occupation_queue_;
+    simsignal_t queueing_time_;
+    simsignal_t response_time_;
+
     void forwardPkt();
     void decompressPkt(PktMessage *pkt);
 
