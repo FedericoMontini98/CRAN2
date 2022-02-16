@@ -31,7 +31,7 @@ module CellularSystem
         input in;	// from AS
     submodules:
         bbu: BBU {
-            compression_used = compression_on;
+            compression_enabled = compression_on;
             compression_ratio = compression_rate;
             @display("p=149.24251,138.105");
         }

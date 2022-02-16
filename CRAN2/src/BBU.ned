@@ -21,7 +21,7 @@ simple BBU
         //signals for statistics and other parameters
         
         @signal[occupationQueue](type=long);
-        @statistic[occupationQueueStat](source="occupationQueue"; record=vector);
+        @statistic[occupationQueueStat](source="occupationQueue"; record=mean,histogram,vector);
         
         @signal[queueingTime];
         @statistic[queueingTimeStat](source="queueingTime"; record=mean,vector);
@@ -29,7 +29,7 @@ simple BBU
         @signal[responseTime];
         @statistic[responseTimeStat](source="responseTime"; record=max,vector);
         
-        bool compression_used;
+        bool compression_enabled;
         double compression_ratio;
     gates:
         input in;	// input from the AS

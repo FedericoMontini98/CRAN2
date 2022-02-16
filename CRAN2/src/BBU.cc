@@ -65,8 +65,9 @@ void BBU::handleMessage(cMessage *msg)
 
 void BBU::finish()
 {
-    pkt_queue->clear();
     cancelAndDelete(msg_timer);
+
+    pkt_queue->clear();
     delete pkt_queue;
 }
 
@@ -93,7 +94,7 @@ void BBU::sendPacket(cMessage *msg) {
     simtime_t response_t = queueing_t + tx_channel->calculateDuration(pkt);
     EV << "time: " << response_t << endl;
 
-    if(par("compression_used").boolValue()) {
+    if(par("compression_enabled").boolValue()) {
         int new_size = compressPacket(pkt);
         EV << "size compressed: " << new_size << endl;
     }
