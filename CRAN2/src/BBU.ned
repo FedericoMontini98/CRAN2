@@ -21,7 +21,7 @@ simple BBU
         //signals for statistics and other parameters
         
         @signal[occupationQueue](type=long);
-        @statistic[occupationQueueStat](source="occupationQueue"; record=mean,histogram,vector);
+        @statistic[occupationQueueStat](source="occupationQueue"; record=mean,max,histogram,vector);
         
         @signal[queueingTime];
         @statistic[queueingTimeStat](source="queueingTime"; record=mean,vector);

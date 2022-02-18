@@ -35,6 +35,10 @@ class AS : public cSimpleModule
     double timeMean = 0;
     double sizeVariance = 0;
 
+    // Distributions
+    int sizeDistribution = 0;
+    int timeDistribution = 0;
+
     //Message to notify to the AS to start another packet generation
     cMessage *generate;
 

@@ -36,6 +36,9 @@ void AS::initialize()
         error("Error in Time Mean Value Extraction: The value is negative");
     }
 
+    sizeDistribution = par("sizeDistribution").intValue();
+    timeDistribution = par("timeDistribution").intValue();
+
     // Create a msg
     generate = new cMessage();
     generate_delay();
@@ -48,10 +51,12 @@ void AS::handleMessage(cMessage *msg)
     int size;
 
     // Generating a "random" size for the packet
-    if(par("sizeDistribution").intValue() == 1) {  // exponential
+    if(sizeDistribution == 1) {  // exponential
         size = (int)exponential(sizeMean, SIZE_RNG);
-    } else {  // lognormal
+    } else if(sizeDistribution == 0) {  // lognormal
         size = (int)lognormal(sizeMean, sizeVariance, SIZE_RNG);
+    } else {    // constant
+        size = sizeMean;
     }
 
     // Create a new packet with size and the cell to reach in the interval [0, N-1]
@@ -69,7 +74,7 @@ void AS::handleMessage(cMessage *msg)
 void AS::generate_delay() {
     simtime_t time;
 
-    if(par("timeDistribution").intValue() == 1) {  // exponential
+    if(timeDistribution == 1) {  // exponential
         //Generating a "random" amount of time to wait
         time = (simtime_t)exponential(timeMean, TIME_RNG);
     } else {    // constant
