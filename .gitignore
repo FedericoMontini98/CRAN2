@@ -49,3 +49,4 @@ CRAN2/.cmdenv-log
 .project
 CRAN2/.cproject
 **/results
+CRAN2/.qtenvrc
