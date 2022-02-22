@@ -18,8 +18,18 @@ package cran2;
 simple RRH
 {
     parameters:
+        
+        //@signal[rrhOccupationQueue](type=long);
+        //@statistic[rrhOccupationQueueStat](source="rrhOccupationQueue"; record=mean,vector);
+        
+        @signal[rrhQueueingTime];
+        @statistic[rrhQueueingTimeStat](source="rrhQueueingTime"; record=mean,vector);
+        
+        @signal[rrhResponseTime];
+        @statistic[rrhResponseTimeStat](source="rrhResponseTime"; record=mean,vector);
+        
         bool compression_used;
-        int compression_ratio;
+        double compression_ratio;
     gates:
         input in;	// from the BBU
         output out;	// towards the related cell

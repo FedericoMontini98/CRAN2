@@ -24,8 +24,13 @@ void Cell::initialize()
 
 void Cell::handleMessage(cMessage *msg)
 {
-    simtime_t elapsed_time = simTime() - msg->getTimestamp();
+    PktMessage *pkt = check_and_cast<PktMessage*>(msg);
+    simtime_t elapsed_time = simTime() - pkt->getCreationTime();
     emit(endToEndDelay_, elapsed_time);
     //EV << elapsed_time;
-    delete msg;
+    delete pkt;
+}
+
+void Cell::finish() {
+    cSimpleModule::finish();
 }

@@ -24,19 +24,27 @@ using namespace omnetpp;
 // Index of the Random Number Generators
 #define TIME_RNG     0
 #define SIZE_RNG     1
+#define TARGET_RNG     2
 
 class AS : public cSimpleModule
 {
-  //Mean values
-  double sizeMean=0;
-  double timeMean=0;
+    int numTarget;
 
-  //Message to notify to the AS to start another packet generation
-  cMessage *generate;
+    //Mean values
+    double sizeMean = 0;
+    double timeMean = 0;
+    double sizeVariance = 0;
+
+    // Distributions
+    int sizeDistribution = 0;
+    int timeDistribution = 0;
+
+    //Message to notify to the AS to start another packet generation
+    cMessage *generate;
 
 
-  //Methods
-  void generate_delay();
+    //Methods
+    void generate_delay();
 
   protected:
     virtual void initialize();

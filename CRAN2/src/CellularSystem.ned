@@ -23,7 +23,7 @@ module CellularSystem
     parameters:
         int N = default(5);
         bool compression_on = default(false);
-        int compression_rate = default(0);
+        double compression_rate = default(0);
         double dr @unit(kbps) = default(5kbps);
 
         @display("bgb=887,280");
@@ -31,7 +31,7 @@ module CellularSystem
         input in;	// from AS
     submodules:
         bbu: BBU {
-            compression_used = compression_on;
+            compression_enabled = compression_on;
             compression_ratio = compression_rate;
             @display("p=149.24251,138.105");
         }

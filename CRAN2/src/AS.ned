@@ -19,10 +19,13 @@ simple AS
 {
     parameters:
         int N_target;	// target cells
-        double sizeMean;
-        double sizeDistribution;
-        double timeMean;
-        double timeDistribution;
+        
+        double sizeMean = default(1);
+        double sizeVariance = default(0.1);
+        int sizeDistribution = default(1);
+        
+        double timeMean = default(1);
+        int timeDistribution = default(1);
  	gates:
         output out;
 }

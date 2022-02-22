@@ -18,14 +18,16 @@ Define_Module(RRH);
 
 void RRH::initialize()
 {
-    // TODO - Generated method body
     timer_ = new cMessage("timer");
+
+    //occupation_queue_ = registerSignal("rrhOccupationQueue");
+    queueing_time_ = registerSignal("rrhQueueingTime");
+    response_time_ = registerSignal("rrhResponseTime");
 }
 
 void RRH::handleMessage(cMessage *msg)
 {
-    // TODO - Generated method body
-    if(msg->isSelfMessage()){
+    if(msg->isSelfMessage()) {
         //decompression ended
         forwardPkt();
 
@@ -33,13 +35,21 @@ void RRH::handleMessage(cMessage *msg)
             PktMessage *new_pkt = queue.front();
             decompressPkt(new_pkt);
         }
-    }
-    else{
-        EV << "D" << endl;
+    } else {
         PktMessage* new_pkt = check_and_cast<PktMessage*>(msg);
         queue.push(new_pkt);
         if(queue.size() == 1)
             decompressPkt(new_pkt);
+    }
+}
+
+void RRH::finish() {
+    cancelAndDelete(timer_);
+
+    while(!queue.empty()) {
+        PktMessage *pkt = queue.front();
+        queue.pop();
+        delete pkt;
     }
 }
 
@@ -52,13 +62,20 @@ void RRH::forwardPkt()
 
 void RRH::decompressPkt(PktMessage *pkt)
 {
-    if(par("compression_used").boolValue()){
-        int64_t to_wait = ((int64_t)50) * ((int64_t)par("compression_ratio").intValue());
-        pkt->setByteLength(pkt->getByteLength() / ((100 - par("compression_ratio").intValue()) / 100));
-        simtime_t decompression_time = SimTime(to_wait, (SimTimeUnit)-3);
+    simtime_t queueing_t = simTime() - pkt->getArrivalTime();
+    emit(queueing_time_, queueing_t);
+    simtime_t decompression_time = 0;
+
+    if(par("compression_used").boolValue()) {
+        int64_t to_wait = ((int64_t)50) * ((int64_t)par("compression_ratio").doubleValue());
+        int new_size = ceil(pkt->getByteLength() / (1 - par("compression_ratio").doubleValue() / 100));
+        pkt->setByteLength(new_size);
+
+        decompression_time = SimTime(to_wait, (SimTimeUnit)-3);
         scheduleAt(simTime() + decompression_time, timer_);
-    }
-    else{
+    } else {
         scheduleAt(simTime(), timer_);
     }
+
+    emit(response_time_, queueing_t + decompression_time);
 }
