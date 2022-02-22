@@ -25,7 +25,7 @@ simple RRH
         @signal[rrhQueueingTime];
         @statistic[rrhQueueingTimeStat](source="rrhQueueingTime"; record=mean,vector);
         
-        @signal[responseTime];
+        @signal[rrhResponseTime];
         @statistic[rrhResponseTimeStat](source="rrhResponseTime"; record=mean,vector);
         
         bool compression_used;
