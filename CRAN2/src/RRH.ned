@@ -19,14 +19,14 @@ simple RRH
 {
     parameters:
         
-        //@signal[occupationQueue](type=long);
-        //@statistic[occupationQueueStat](source="occupationQueue"; record=mean,vector);
+        //@signal[rrhOccupationQueue](type=long);
+        //@statistic[rrhOccupationQueueStat](source="rrhOccupationQueue"; record=mean,vector);
         
-        @signal[queueingTime];
-        @statistic[queueingTimeStat](source="queueingTime"; record=mean,vector);
+        @signal[rrhQueueingTime];
+        @statistic[rrhQueueingTimeStat](source="rrhQueueingTime"; record=mean,vector);
         
         @signal[responseTime];
-        @statistic[responseTimeStat](source="responseTime"; record=mean,vector);
+        @statistic[rrhResponseTimeStat](source="rrhResponseTime"; record=mean,vector);
         
         bool compression_used;
         double compression_ratio;

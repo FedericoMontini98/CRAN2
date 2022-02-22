@@ -21,13 +21,13 @@ simple BBU
         //signals for statistics and other parameters
         
         @signal[occupationQueue](type=long);
-        @statistic[occupationQueueStat](source="occupationQueue"; record=mean,max,histogram,vector);
+        @statistic[bbuOccupationQueueStat](source="occupationQueue"; record=mean,max,histogram,vector);
         
         @signal[queueingTime];
-        @statistic[queueingTimeStat](source="queueingTime"; record=mean,vector);
+        @statistic[bbuQueueingTimeStat](source="queueingTime"; record=mean,vector);
         
         @signal[responseTime];
-        @statistic[responseTimeStat](source="responseTime"; record=max,vector);
+        @statistic[bbuResponseTimeStat](source="responseTime"; record=max,vector);
         
         bool compression_enabled;
         double compression_ratio;

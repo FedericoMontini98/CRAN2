@@ -20,9 +20,9 @@ void RRH::initialize()
 {
     timer_ = new cMessage("timer");
 
-    //occupation_queue_ = registerSignal("occupationQueue");
-    queueing_time_ = registerSignal("queueingTime");
-    response_time_ = registerSignal("responseTime");
+    //occupation_queue_ = registerSignal("rrhOccupationQueue");
+    queueing_time_ = registerSignal("rrhQueueingTime");
+    response_time_ = registerSignal("rrhResponseTime");
 }
 
 void RRH::handleMessage(cMessage *msg)
