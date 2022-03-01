@@ -29,7 +29,7 @@ void BBU::initialize()
     occupation_queue_ = registerSignal("occupationQueue");
     queueing_time_ = registerSignal("queueingTime");
     response_time_ = registerSignal("responseTime");
-
+    pkt_in_queue_ = registerSignal("packetInQueue");
 }
 
 void BBU::handleMessage(cMessage *msg)
@@ -48,6 +48,7 @@ void BBU::handleMessage(cMessage *msg)
             EV << " not in transit, queue > 0 " << simTime() << endl;
             in_transit = true;
             cPacket *pkt= pkt_queue->pop();
+            //emit(pkt_in_queue_, pkt_queue->getLength());
             sendPacket(pkt);
         }
     } else {
@@ -69,6 +70,7 @@ void BBU::handleMessage(cMessage *msg)
         }
         long queue_length = static_cast<long>(pkt_queue->getByteLength());
         emit(occupation_queue_, queue_length);
+        //emit(pkt_in_queue_, pkt_queue->getLength());
     }
 }
 
@@ -89,6 +91,7 @@ int BBU::compressPacket(cPacket *pkt) {
 
 
 void BBU::sendPacket(cMessage *msg) {
+    emit(pkt_in_queue_, pkt_queue->getLength());
     PktMessage *pkt = check_and_cast<PktMessage*>(msg);
     int index_gate = pkt->getTarget_cell();
     EV << index_gate << " index target " << endl;
