@@ -72,10 +72,12 @@ void RRH::decompressPkt(PktMessage *pkt)
         pkt->setByteLength(new_size);
 
         decompression_time = SimTime(to_wait, (SimTimeUnit)-3);
-        scheduleAt(simTime() + decompression_time, timer_);
-    } else {
-        scheduleAt(simTime(), timer_);
     }
+
+    scheduleAt(simTime() + decompression_time, timer_);
+    /*} else {
+        scheduleAt(simTime(), timer_);
+    }*/
 
     emit(response_time_, queueing_t + decompression_time);
 }
