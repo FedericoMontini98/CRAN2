@@ -22,7 +22,7 @@ import cran2.CellularSystem;
 network CRAN2
 {
     parameters:
-        int N_cells;
+    int N_cells;
     @display("bgb=393,343");
     submodules:
         as: AS {
