@@ -20,7 +20,7 @@ void RRH::initialize()
 {
     timer_ = new cMessage("timer");
 
-    //occupation_queue_ = registerSignal("rrhOccupationQueue");
+    packet_in_queue_ = registerSignal("rrhPacketInQueue");
     queueing_time_ = registerSignal("rrhQueueingTime");
     response_time_ = registerSignal("rrhResponseTime");
 }
@@ -64,10 +64,13 @@ void RRH::decompressPkt(PktMessage *pkt)
 {
     simtime_t queueing_t = simTime() - pkt->getArrivalTime();
     emit(queueing_time_, queueing_t);
+    long in_queue = static_cast<long>(queue.size());
+    emit(packet_in_queue_, in_queue);
     simtime_t decompression_time = 0;
 
     if(par("compression_used").boolValue()) {
-        int64_t to_wait = ((int64_t)50) * ((int64_t)par("compression_ratio").doubleValue());
+        double alfa = par("alfa").doubleValue();
+        double to_wait = (alfa * 50) * (par("compression_ratio").doubleValue());
         int new_size = ceil(pkt->getByteLength() / (1 - par("compression_ratio").doubleValue() / 100));
         pkt->setByteLength(new_size);
 
