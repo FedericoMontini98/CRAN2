@@ -1,39 +1,53 @@
-# /bin/bash
-#
-# This script generates .csv files from .sca and .vec files that are in a directory.
-# The path of the directory must be passed from command line as first argument.
-#
-#Insert this script in a new folder called "scripts" in "omnetpp-5.7". Execute it with "./scripts/extract-warm-up-results.sh"
+#!/bin/bash
 
+repeat=25
+fileExt=vec
+statType=vector
+OPTIONS=hc:r:e:t:
+DIR_RESULT="./CRAN2/CRAN2/simulations/results"
+#DIR_RESULT="D:/PECSN_simulation_results/verification/continuity"
+DIR_OUT="./CRAN2/csv_results"
 
-#Results location
-DIR_RESULT="../CRAN2/simulations/results"
-#DIR_RESULT="D:/PECSN_simulation_results/verification"
-cd $DIR_RESULT
+statistics=(bbuPacketInQueue bbuQueueingTimeStat bbuResponseTimeStat bbuOccupationQueueStat rrhQueueingTimeStat rrhResponseTimeStat rrhPacketInQueueStat delayStat)
 
-N=25	# repeat
+usage() {
+cat << EOF
+Collect statistics from OMNET++
 
-for FILE in continuity_A*.vec
-#for FILE in continuity_B*.vec
-#for FILE in consistency_A*.vec
-#for FILE in consistency_B*.vec
-#for FILE in monotonicity_A*.vec
-#for FILE in monotonicity_B_exp_dr*.vec
-#for FILE in monotonicity_B_exp_cells*.vec
-do
-	name=$(echo $FILE | sed 's/-#.*.vec//')
-	
-#cell statistics
-	scavetool export --type v -o $name-delayE2E.csv -F CSV-S -v -x precision=14 -x separator=semicolon -f "delayStat:vector" $name-*.vec
+-h          help
+-c          name of the configuration
+-r          number of repetitions (default 25)
+-e          extension of the file (default vec)
+-t          type of the statistics (defaul vector)
 
-#bbu statistics
-	#scavetool export --type v -o $name-bbuOccupationQueueStat.csv -F CSV-S -v -x precision=14 -x separator=semicolon -f "bbuOccupationQueueStat:vector" $name-*.vec
-	#scavetool export --type v -o $name-bbuPacketInQueue.csv -F CSV-S -v -x precision=14 -x separator=semicolon -f "bbuPacketInQueue:vector" $name-*.vec
-	#scavetool export --type v -o $name-bbuQueueingTimeStat.csv -F CSV-S -v -x precision=14 -x separator=semicolon -f "bbuQueueingTimeStat:vector" $name-*.vec
-	#scavetool export --type v -o $name-bbuResponseTimeStat.csv -F CSV-S -v -x precision=14 -x separator=semicolon -f "bbuResponseTimeStat:vector" $name-*.vec
+EOF
+}
 
-#rrh statistics
-	#scavetool export --type v -o $name-rrhResponseTimeStat.csv -F CSV-S -v -x precision=14 -x separator=semicolon -f "rrhResponseTimeStat:vector" $name-*.vec
-	#scavetool export --type v -o $name-rrhQueueingTimeStat.csv -F CSV-S -v -x precision=14 -x separator=semicolon -f "rrhQueueingTimeStat:vector" $name-*.vec	
-	#scavetool export --type v -o $name-rrhPacketInQueueStat.csv -F CSV-S -v -x precision=14 -x separator=semicolon -f "rrhPacketInQueueStat:vector" $name-*.vec
+# Parse command line
+while getopts $OPTIONS opt ; do
+	case $opt in
+	h ) usage ; exit 0 ;;
+	c ) configName=$OPTARG ;;
+	r ) repeat=$OPTARG ;;
+	e ) fileExt=$OPTARG ;;
+    t ) statType=$OPTARG ;;
+	esac
 done
+shift $(($OPTIND-1))
+
+if [ -z $configName ] ; then
+	echo "ERROR: you must provide a configuration name"
+	usage
+	exit 1
+fi
+
+for statistic in ${statistics[@]} ; do
+	#echo $statistic
+	path=${DIR_RESULT}"/${configName}"
+
+	#echo "scavetool export --type v -o ${DIR_OUT}/${configName}_${i}_${statistic}.csv -F CSV-S -v -x precision=14 -x separator=semicolon -f ${statistic}:$statType $path"
+	scavetool export --type v -o ${DIR_OUT}/${configName}_${statistic}.csv -F CSV-S -v -x precision=14 -x separator=semicolon -f ${statistic}:$statType $path*.${fileExt}
+	#fix_csv ${DIR_OUT}/${configName}_${file_id}_delay.csv
+done
+
+exit 0
