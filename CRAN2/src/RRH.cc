@@ -57,6 +57,8 @@ void RRH::forwardPkt()
 {
     PktMessage *to_transmit = queue.front();
     queue.pop();
+    long in_queue = static_cast<long>(queue.size());
+    emit(packet_in_queue_, in_queue);
     send(to_transmit, "out");
 }
 
@@ -64,8 +66,6 @@ void RRH::decompressPkt(PktMessage *pkt)
 {
     simtime_t queueing_t = simTime() - pkt->getArrivalTime();
     emit(queueing_time_, queueing_t);
-    long in_queue = static_cast<long>(queue.size());
-    emit(packet_in_queue_, in_queue);
     simtime_t decompression_time = 0;
 
     if(par("compression_used").boolValue()) {
@@ -78,9 +78,6 @@ void RRH::decompressPkt(PktMessage *pkt)
     }
 
     scheduleAt(simTime() + decompression_time, timer_);
-    /*} else {
-        scheduleAt(simTime(), timer_);
-    }*/
 
     emit(response_time_, queueing_t + decompression_time);
 }

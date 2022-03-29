@@ -37,15 +37,15 @@ void BBU::handleMessage(cMessage *msg)
     if(msg->isSelfMessage()) {
         EV << simTime() << " msg->isSelf, queue length: " << pkt_queue->getLength() << endl;
         in_transit = tx_channel->isBusy();
-        // extract packet from queue and send
+        /* extract packet from queue and send*/
         //EV << pkt_queue->getLength() << " -> length" << endl;
         if(in_transit) {
-            EV << "in transit selfmsg " << simTime() << endl;
-            EV << tx_channel->getTransmissionFinishTime() << " getFinishTime selfmsg" << endl;
+            //EV << "in transit selfmsg " << simTime() << endl;
+            //EV << tx_channel->getTransmissionFinishTime() << " getFinishTime selfmsg" << endl;
             cancelEvent(msg);
             scheduleAt(tx_channel->getTransmissionFinishTime(), timer_);
         } else if(pkt_queue->getLength() > 0) {
-            EV << " not in transit, queue > 0 " << simTime() << endl;
+            //EV << " not in transit, queue > 0 " << simTime() << endl;
             in_transit = true;
             cPacket *pkt= pkt_queue->pop();
             //emit(pkt_in_queue_, pkt_queue->getLength());
@@ -108,11 +108,9 @@ void BBU::sendPacket(cMessage *msg) {
     EV << "response_time: " << response_t << ", duration: " << duration <<endl;
 
     if(par("compression_enabled").boolValue()) {
-        EV << "time pre compression: " << simTime() << endl;
 
         int new_size = compressPacket(pkt);
         EV << "size compressed: " << new_size << endl;
-        EV << "time post compression: " << simTime() << endl;
     }
 
     EV << simTime() << " time before send " << endl;
@@ -123,8 +121,7 @@ void BBU::sendPacket(cMessage *msg) {
     EV << finish_time_ << " time after send" << endl;
     EV << simTime() + duration << " simTime + duration" << endl;
     if(finish_time_ < simTime()) {
-        EV << "finisch < simTime, simTime: " << simTime() << endl;
-
+        //EV << "finish < simTime, simTime: " << simTime() << endl;
         finish_time_ = simTime();
     }
     scheduleAt(finish_time_, timer_);
