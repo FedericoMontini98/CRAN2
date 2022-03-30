@@ -52,3 +52,4 @@ CRAN2/.cproject
 CRAN2/.qtenvrc
 *.csv
 /csv_results/
+/plots/
