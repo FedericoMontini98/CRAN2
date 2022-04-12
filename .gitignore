@@ -50,3 +50,6 @@ CRAN2/.cmdenv-log
 CRAN2/.cproject
 **/results
 CRAN2/.qtenvrc
+*.csv
+/csv_results/
+/plots/
