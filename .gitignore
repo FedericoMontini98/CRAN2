@@ -53,3 +53,4 @@ CRAN2/.qtenvrc
 *.csv
 /csv_results/
 /plots/
+/xlsx_results_dir/

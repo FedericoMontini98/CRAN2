@@ -76,7 +76,7 @@ for file_id in `seq $repeat` ; do
 	path=${DIR_RESULT}"/${configName}"-#${file_id}.${fileExt}
 
 	#echo "scavetool export --type v -o ${DIR_OUT}/${configName}_*#${file_id}_${statistic}.csv -F CSV-S -v -x precision=14 -x separator=semicolon -f ${statistic}:$statType $path"
-	scavetool export --type v -o ${DIR_OUT}/${configName}_#${file_id}_${statistic}.csv -F CSV-S -v -x precision=14 -x separator=semicolon -f ${statistic}:$statType $path
+	scavetool export --type v -o ${DIR_OUT}/${configName}_${statistic}_#${file_id}.csv -F CSV-S -v -x precision=14 -x separator=semicolon -f ${statistic}:$statType $path
 	#fix_csv ${DIR_OUT}/${configName}_${file_id}_delay.csv
 done
 #done
