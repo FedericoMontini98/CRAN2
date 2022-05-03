@@ -18,6 +18,9 @@ package cran2;
 simple RRH
 {
     parameters:
+                
+        @signal[packetInRRH];
+        @statistic[packetInRRHStat](source="packetInRRH"; record=vector);
         
         @signal[rrhPacketInQueue](type=long);
         @statistic[rrhPacketInQueueStat](source="rrhPacketInQueue"; record=mean,vector);

@@ -32,6 +32,9 @@ simple BBU
         @signal[packetInQueue];
         @statistic[bbuPacketInQueue](source="packetInQueue"; record=max,vector);
         
+        @signal[packetInBBU];
+        @statistic[packetInBBUStat](source="packetInBBU"; record=max,vector);
+
         bool compression_enabled;
         double compression_ratio;
     gates:

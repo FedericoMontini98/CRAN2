@@ -35,6 +35,7 @@ class BBU : public cSimpleModule
     simsignal_t queueing_time_;
     simsignal_t response_time_;
     simsignal_t pkt_in_queue_;
+    simsignal_t pkt_in_bbu_;
 
   protected:
     virtual void initialize();

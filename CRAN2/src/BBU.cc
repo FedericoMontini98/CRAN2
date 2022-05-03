@@ -30,6 +30,7 @@ void BBU::initialize()
     queueing_time_ = registerSignal("queueingTime");
     response_time_ = registerSignal("responseTime");
     pkt_in_queue_ = registerSignal("packetInQueue");
+    pkt_in_bbu_ = registerSignal("packetInBBU");
 }
 
 void BBU::handleMessage(cMessage *msg)
@@ -70,7 +71,7 @@ void BBU::handleMessage(cMessage *msg)
         }
         long queue_length = static_cast<long>(pkt_queue->getByteLength());
         emit(occupation_queue_, queue_length);
-        //emit(pkt_in_queue_, pkt_queue->getLength());
+        emit(pkt_in_bbu_, pkt_queue->getLength());
     }
 }
 

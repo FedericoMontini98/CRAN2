@@ -20,6 +20,7 @@ void RRH::initialize()
 {
     timer_ = new cMessage("timer");
 
+    packet_in_rrh_ = registerSignal("packetInRRH");
     packet_in_queue_ = registerSignal("rrhPacketInQueue");
     queueing_time_ = registerSignal("rrhQueueingTime");
     response_time_ = registerSignal("rrhResponseTime");
@@ -38,8 +39,14 @@ void RRH::handleMessage(cMessage *msg)
     } else {
         PktMessage* new_pkt = check_and_cast<PktMessage*>(msg);
         queue.push(new_pkt);
-        if(queue.size() == 1)
+        long in_queue;
+        if(queue.size() == 1) {
+            in_queue = static_cast<long>(queue.size() - 1);
             decompressPkt(new_pkt);
+        } else
+            in_queue = static_cast<long>(queue.size());
+
+        emit(packet_in_rrh_, in_queue);
     }
 }
 
