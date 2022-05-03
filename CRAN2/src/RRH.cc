@@ -29,17 +29,17 @@ void RRH::handleMessage(cMessage *msg)
 {
     if(msg->isSelfMessage()) {
         //decompression ended
+        dec_unit_in_use = false;
         forwardPkt();
 
-        if(queue.size() > 0){
-            PktMessage *new_pkt = queue.front();
-            decompressPkt(new_pkt);
-        }
+        if(queue.size() > 0)
+            decompressPkt();
+
     } else {
         PktMessage* new_pkt = check_and_cast<PktMessage*>(msg);
         queue.push(new_pkt);
-        if(queue.size() == 1)
-            decompressPkt(new_pkt);
+        if(queue.size() == 1 && !dec_unit_in_use)
+            decompressPkt();
     }
 }
 
@@ -55,16 +55,19 @@ void RRH::finish() {
 
 void RRH::forwardPkt()
 {
-    PktMessage *to_transmit = queue.front();
-    queue.pop();
+    PktMessage *to_transmit = pkt_in_dec;
+    pkt_in_dec = nullptr;
     long in_queue = static_cast<long>(queue.size());
     emit(packet_in_queue_, in_queue);
     send(to_transmit, "out");
 }
 
-void RRH::decompressPkt(PktMessage *pkt)
+void RRH::decompressPkt()
 {
     simtime_t queueing_t = simTime() - pkt->getArrivalTime();
+    dec_unit_in_use = true;
+    pkt_in_dec = queue.front();
+    queue.pop();
     emit(queueing_time_, queueing_t);
     simtime_t decompression_time = 0;
 
