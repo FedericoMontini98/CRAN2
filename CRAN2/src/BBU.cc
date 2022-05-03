@@ -103,15 +103,15 @@ void BBU::sendPacket(cMessage *msg) {
 
     simtime_t queueing_t = simTime() - pkt->getTimestamp();
     emit(queueing_time_, queueing_t);
-    simtime_t duration = tx_channel->calculateDuration(pkt);
-    simtime_t response_t = queueing_t + duration;
-    EV << "response_time: " << response_t << ", duration: " << duration <<endl;
 
     if(par("compression_enabled").boolValue()) {
 
         int new_size = compressPacket(pkt);
         EV << "size compressed: " << new_size << endl;
     }
+    simtime_t duration = tx_channel->calculateDuration(pkt);
+    simtime_t response_t = queueing_t + duration;
+    EV << "response_time: " << response_t << ", duration: " << duration <<endl;
 
     EV << simTime() << " time before send " << endl;
     send(pkt, "out", index_gate);
