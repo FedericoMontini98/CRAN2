@@ -21,16 +21,16 @@ simple BBU
         //signals for statistics and other parameters
         
         @signal[occupationQueue](type=long);
-        @statistic[bbuOccupationQueueStat](source="occupationQueue"; record=mean,max,histogram,vector);
+        @statistic[bbuOccupationQueueStat](source="occupationQueue"; record=mean,histogram,vector);
         
         @signal[queueingTime];
         @statistic[bbuQueueingTimeStat](source="queueingTime"; record=mean,vector);
         
         @signal[responseTime];
-        @statistic[bbuResponseTimeStat](source="responseTime"; record=max,vector);
+        @statistic[bbuResponseTimeStat](source="responseTime"; record=vector);
         
         @signal[packetInQueue];
-        @statistic[bbuPacketInQueue](source="packetInQueue"; record=max,vector);
+        @statistic[bbuPacketInQueue](source="packetInQueue"; record=vector);
         
         @signal[packetInBBU];
         @statistic[packetInBBUStat](source="packetInBBU"; record=max,vector);

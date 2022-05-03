@@ -35,7 +35,7 @@ class RRH : public cSimpleModule
     simsignal_t response_time_;
 
     void forwardPkt();
-    void decompressPkt(PktMessage *pkt);
+    void decompressPkt();
 
   protected:
     virtual void initialize();
