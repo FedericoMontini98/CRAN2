@@ -59,6 +59,9 @@ void BBU::handleMessage(cMessage *msg)
         EV << pkt->getTimestamp() << " get timestamp arriving new pkt " << endl;
         EV << simTime() << " arriving time" << endl;
 
+        long queue_length = static_cast<long>(pkt_queue->getByteLength());
+        emit(pkt_in_bbu_, pkt_queue->getLength() + (int)in_transit);
+
         // the packet is queued only if the transmitted channel is busy or there are other packets in the queue
         if(in_transit || !pkt_queue->isEmpty()) {
             pkt_queue->insert(pkt);
@@ -69,9 +72,7 @@ void BBU::handleMessage(cMessage *msg)
             in_transit = true;
             sendPacket(pkt);
         }
-        long queue_length = static_cast<long>(pkt_queue->getByteLength());
         emit(occupation_queue_, queue_length);
-        emit(pkt_in_bbu_, pkt_queue->getLength());
     }
 }
 
