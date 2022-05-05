@@ -4,9 +4,9 @@ repeat=25
 fileExt=vec
 statType=vector
 OPTIONS=hc:r:e:s:t:
-DIR_RESULT="./CRAN2/CRAN2/simulations/results"
+DIR_RESULT="./CRAN2/simulations/results"
 #DIR_RESULT="D:/PECSN_simulation_results/verification/continuity"
-DIR_OUT="./CRAN2/csv_results"
+DIR_OUT="./"
 
 usage() {
 cat << EOF
