@@ -35,11 +35,8 @@ class BBU : public cSimpleModule
     simsignal_t queueing_time_;
     simsignal_t response_time_;
     simsignal_t pkt_in_queue_;
-<<<<<<< Updated upstream
     simsignal_t pkt_in_bbu_;
-=======
     simsignal_t pkt_size;
->>>>>>> Stashed changes
 
   protected:
     virtual void initialize();

@@ -32,15 +32,12 @@ simple BBU
         @signal[packetInQueue];
         @statistic[bbuPacketInQueue](source="packetInQueue"; record=vector);
         
-<<<<<<< Updated upstream
         @signal[packetInBBU];
         @statistic[packetInBBUStat](source="packetInBBU"; record=max,vector);
 
-=======
         @signal[pktSize];
         @statistic[CompressedPktSize](source="pktSize"; record=max,vector);
         
->>>>>>> Stashed changes
         bool compression_enabled;
         double compression_ratio;
     gates:

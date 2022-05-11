@@ -30,11 +30,8 @@ void BBU::initialize()
     queueing_time_ = registerSignal("queueingTime");
     response_time_ = registerSignal("responseTime");
     pkt_in_queue_ = registerSignal("packetInQueue");
-<<<<<<< Updated upstream
     pkt_in_bbu_ = registerSignal("packetInBBU");
-=======
     pkt_size = registerSignal("pktSize");
->>>>>>> Stashed changes
 }
 
 void BBU::handleMessage(cMessage *msg)
