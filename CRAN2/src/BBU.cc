@@ -31,6 +31,7 @@ void BBU::initialize()
     response_time_ = registerSignal("responseTime");
     pkt_in_queue_ = registerSignal("packetInQueue");
     pkt_in_bbu_ = registerSignal("packetInBBU");
+    pkt_size = registerSignal("pktSize");
 }
 
 void BBU::handleMessage(cMessage *msg)
@@ -110,6 +111,7 @@ void BBU::sendPacket(cMessage *msg) {
 
         int new_size = compressPacket(pkt);
         EV << "size compressed: " << new_size << endl;
+        emit(pkt_size, new_size);
     }
     simtime_t duration = tx_channel->calculateDuration(pkt);
     simtime_t response_t = queueing_t + duration;
