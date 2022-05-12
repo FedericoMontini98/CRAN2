@@ -17,17 +17,30 @@
 #define __C_RAN2_RRH_H_
 
 #include <omnetpp.h>
+#include "PktMessage_m.h"
+#include <queue>
 
 using namespace omnetpp;
 
-/**
- * TODO - Generated class
- */
 class RRH : public cSimpleModule
 {
+    cMessage* timer_ = nullptr;
+    std::queue <PktMessage*> queue;
+    bool dec_unit_in_use = false;
+    PktMessage* pkt_in_dec = nullptr;
+
+    simsignal_t packet_in_rrh_;
+    simsignal_t packet_in_queue_;
+    simsignal_t queueing_time_;
+    simsignal_t response_time_;
+
+    void forwardPkt();
+    void decompressPkt();
+
   protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
+    virtual void finish();
 };
 
 #endif

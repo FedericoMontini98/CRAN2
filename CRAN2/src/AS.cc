@@ -19,12 +19,74 @@ Define_Module(AS);
 
 void AS::initialize()
 {
-    // TODO - Generated method body
-	error("Test");
+    numTarget = par("N_target").intValue();
 
+    sizeMean = par("sizeMean");
+    if(sizeMean < 0){
+        error("Error in  Size Mean Value Extraction: The value is negative");
+    }
+
+    sizeVariance = par("sizeVariance");
+    if(timeMean < 0){
+        error("Error in Size Variance Value Extraction: The value is negative");
+    }
+
+    timeMean = par("timeMean");
+    if(timeMean < 0){
+        error("Error in Time Mean Value Extraction: The value is negative");
+    }
+
+    sizeDistribution = par("sizeDistribution").intValue();
+    timeDistribution = par("timeDistribution").intValue();
+
+    // Create a msg
+    generate = new cMessage();
+    generate_delay();
 }
 
+//Function that is activated after the waiting time. It needs to create and prepare a packet to send on the "out" link to the BBU
+//After the send is done will call generate_delay to have another wait time
 void AS::handleMessage(cMessage *msg)
 {
-    // TODO - Generated method body
+    int size;
+
+    // Generating a "random" size for the packet
+    if(sizeDistribution == 1) {  // exponential
+        size = (int)exponential(sizeMean, SIZE_RNG);
+    } else if(sizeDistribution == 0) {  // lognormal
+        size = (int)lognormal(sizeMean, sizeVariance, SIZE_RNG);
+    } else {    // constant
+        size = sizeMean;
+    }
+
+    // Create a new packet with size and the cell to reach in the interval [0, N-1]
+    PktMessage* pkt = new PktMessage();
+    pkt->setByteLength(size);
+    pkt->setTarget_cell(intuniform(0, numTarget-1, TARGET_RNG));
+
+    // Send the generated pkt on the "out" link, also the only one available
+    send(pkt, "out");
+    //I proceed to wait another pkt generation cycle
+    generate_delay();
+}
+
+//Function that generate an amount of time to wait between the creation of two packets to send to the BBU
+void AS::generate_delay() {
+    simtime_t time;
+
+    if(timeDistribution == 1) {  // exponential
+        //Generating a "random" amount of time to wait
+        time = (simtime_t)exponential(timeMean, TIME_RNG);
+    } else {    // constant
+        time = timeMean;
+    }
+
+    // Send to myself a msg to notify that i have to send a packet to the BBU
+    scheduleAt(simTime() + time, generate);
+    EV << "generated time: " << time << endl;
+}
+
+//Function to stop the packet generation
+void AS::finish() {
+    cancelAndDelete(generate);
 }

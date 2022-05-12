@@ -20,8 +20,26 @@ simple BBU
     parameters:
         //signals for statistics and other parameters
         
-        @signal[occupationQueue];
-        @statistic[occupationQueueStat](source="pktInQueue"; record=vector);
+        @signal[occupationQueue](type=long);
+        @statistic[bbuOccupationQueueStat](source="occupationQueue"; record=mean,histogram,vector);
+        
+        @signal[queueingTime];
+        @statistic[bbuQueueingTimeStat](source="queueingTime"; record=mean,vector);
+        
+        @signal[responseTime];
+        @statistic[bbuResponseTimeStat](source="responseTime"; record=vector);
+        
+        @signal[packetInQueue];
+        @statistic[bbuPacketInQueue](source="packetInQueue"; record=vector);
+        
+        @signal[packetInBBU];
+        @statistic[packetInBBUStat](source="packetInBBU"; record=max,vector);
+
+        @signal[pktSize];
+        @statistic[CompressedPktSize](source="pktSize"; record=max,vector);
+        
+        bool compression_enabled;
+        double compression_ratio;
     gates:
         input in;	// input from the AS
         output out[];	// outputs towards the RRHs

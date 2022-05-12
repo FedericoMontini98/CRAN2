@@ -17,6 +17,7 @@
 #define __C_RAN2_CELL_H_
 
 #include <omnetpp.h>
+#include "PktMessage_m.h"
 
 using namespace omnetpp;
 
@@ -31,6 +32,7 @@ class Cell : public cSimpleModule
   protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
+    virtual void finish();
 };
 
 #endif

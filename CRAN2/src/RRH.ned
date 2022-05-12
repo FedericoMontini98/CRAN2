@@ -18,7 +18,22 @@ package cran2;
 simple RRH
 {
     parameters:
+                
+        @signal[packetInRRH];
+        @statistic[packetInRRHStat](source="packetInRRH"; record=vector);
         
+        @signal[rrhPacketInQueue](type=long);
+        @statistic[rrhPacketInQueueStat](source="rrhPacketInQueue"; record=mean,vector);
+        
+        @signal[rrhQueueingTime];
+        @statistic[rrhQueueingTimeStat](source="rrhQueueingTime"; record=mean,vector);
+        
+        @signal[rrhResponseTime];
+        @statistic[rrhResponseTimeStat](source="rrhResponseTime"; record=mean,vector);
+        
+        bool compression_used;
+        double compression_ratio;
+        double alfa = default(1);	// delay compression factor
     gates:
         input in;	// from the BBU
         output out;	// towards the related cell

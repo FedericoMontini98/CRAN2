@@ -17,17 +17,39 @@
 #define __C_RAN2_AS_H_
 
 #include <omnetpp.h>
+#include "PktMessage_m.h"
 
 using namespace omnetpp;
 
-/**
- * TODO - Generated class
- */
+// Index of the Random Number Generators
+#define TIME_RNG     0
+#define SIZE_RNG     1
+#define TARGET_RNG     2
+
 class AS : public cSimpleModule
 {
+    int numTarget;
+
+    //Mean values
+    double sizeMean = 0;
+    double timeMean = 0;
+    double sizeVariance = 0;
+
+    // Distributions
+    int sizeDistribution = 0;
+    int timeDistribution = 0;
+
+    //Message to notify to the AS to start another packet generation
+    cMessage *generate;
+
+
+    //Methods
+    void generate_delay();
+
   protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
+    virtual void finish();
 };
 
 #endif

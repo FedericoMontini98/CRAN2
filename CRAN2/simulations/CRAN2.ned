@@ -22,14 +22,16 @@ import cran2.CellularSystem;
 network CRAN2
 {
     parameters:
-        int N_cells;
+    int N_cells;
     @display("bgb=393,343");
     submodules:
         as: AS {
             @display("p=194,65");
+            N_target = N_cells;
         }
         cellularSystem: CellularSystem {
             @display("p=194,234");
+            N = N_cells;
         }
     connections:
         as.out --> cellularSystem.in;
