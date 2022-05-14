@@ -46,10 +46,10 @@ fi
 
 
 #for i in 20 22 40 42 44 ; do	# continuity
-#for i in 20 22 40 42 44 ; do	# monotonicity_b_cells
-for i in 20 23 30 ; do			# monotonicity dr
+for i in 3 7 10 16 20 ; do	# monotonicity cells
+#for i in 20 23 30 ; do			# monotonicity dr
     
-    ./CRAN2/scripts/extract_single_stat.sh -c "${configName}-${i}" -s delayStat
+    ./CRAN2/scripts/extract_single_stat.sh -c "${configName}-${i}" -s ${statistic}
 
 done
 
