@@ -129,9 +129,3 @@ void BBU::sendPacket(cMessage *msg) {
     scheduleAt(finish_time_, timer_);
 
 }
-
-
-
-
-
-
