@@ -23,13 +23,13 @@ simple RRH
         @statistic[packetInRRHStat](source="packetInRRH"; record=vector);
         
         @signal[rrhPacketInQueue](type=long);
-        @statistic[rrhPacketInQueueStat](source="rrhPacketInQueue"; record=mean,vector);
+        @statistic[rrhPacketInQueueStat](source="rrhPacketInQueue"; record=max,vector);
         
         @signal[rrhQueueingTime];
-        @statistic[rrhQueueingTimeStat](source="rrhQueueingTime"; record=mean,vector);
+        @statistic[rrhQueueingTimeStat](source="rrhQueueingTime"; record=vector);
         
         @signal[rrhResponseTime];
-        @statistic[rrhResponseTimeStat](source="rrhResponseTime"; record=mean,vector);
+        @statistic[rrhResponseTimeStat](source="rrhResponseTime"; record=vector);
         
         bool compression_used;
         double compression_ratio;
