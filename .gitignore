@@ -57,3 +57,4 @@ CRAN2/.qtenvrc
 /plots/
 /xlsx_results_dir/
 /scripts/
+*.sh
