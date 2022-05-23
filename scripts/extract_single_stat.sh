@@ -6,7 +6,7 @@ statType=vector
 OPTIONS=hc:r:e:s:t:
 DIR_RESULT="./CRAN2/CRAN2/simulations/results/"
 #DIR_RESULT="D:/PECSN_simulation_results/verification/continuity"
-DIR_OUT="C:/omnetpp-5.7/CRAN2/csv_results"
+DIR_OUT="./CRAN2/csv_results"
 
 usage() {
 cat << EOF
@@ -46,6 +46,10 @@ if [ -z $statistic ] ; then
 	usage
 	exit 1
 fi
+
+#path_out=${DIR_OUT}/${configName}_${statistic}
+
+#mkdir -p $path
 
 path=$DIR_RESULT${configName}
 
