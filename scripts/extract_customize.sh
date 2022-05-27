@@ -48,13 +48,18 @@ fi
 #for i in 3 7 10 16 20 ; do				# monotonicity cells
 #for i in 20 23 30 ; do					# monotonicity dr
 #for i in 600 700 800 900 1000 1100 1200 1300 1400 1500 1600 1700 1800 ; do		# calibration_size
-for i in 1.4 1.5 1.6 1.7 1.8 1.9; do		# calibration_speed
+for i in 0.1 0.5; do		# calibration_speed
 #for i in 25 30 35 40 45 ; do			# %compression
-	for j in 6.93 7.00 7.09 7.170 7.245 7.313 ; do
-#for j in 30 32 34 36 38 40 42 44 46 48 50 ; do
-# for j in 7.09 7.245 7.313 ; do
-	#./scripts/extract_single_stat.sh -c "${configName}-${j}" -s ${statistic}		# fede
-		./extract_single_stat.sh -c "${configName}-${i},${j}" -s ${statistic}
+	for j in 30 60 ; do
+		for k in 1.1 3.7 ; do
+			for n in 8 18 ; do
+				for a in 0.010 0.015 ; do
+				# for j in 7.09 7.245 7.313 ; do
+					#./scripts/extract_single_stat.sh -c "${configName}-${j}" -s ${statistic}		# fede
+					./extract_single_stat.sh -c "${configName}-${i},${j},${k},${n},${a}" -s ${statistic}
+				done
+			done
+		done
 	done
 done
 
