@@ -58,3 +58,5 @@ CRAN2/.qtenvrc
 /xlsx_results_dir/
 /scripts/
 *.sh
+scripts/extract_customize.sh
+scripts/extract_single_stat.sh
