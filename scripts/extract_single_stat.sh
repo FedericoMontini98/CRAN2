@@ -55,6 +55,6 @@ fi
 
 path=$DIR_RESULT${configName}
 
-scavetool export --type v -o ${DIR_OUT}/${configName}_${statistic}.csv -F CSV-S -v -x precision=14 -x separator=semicolon -f ${statistic}:$statType $path*.${fileExt}
+scavetool export --type v -o "${DIR_OUT}/${configName}_${statistic}.csv" -F CSV-S -v -x precision=14 -x separator=semicolon -f ${statistic}:$statType $path*.${fileExt}
 
 exit 0
