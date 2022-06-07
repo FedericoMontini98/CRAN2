@@ -44,7 +44,6 @@ if [ -z $statistic ] ; then
 	exit 1
 fi
 
-
 mkdir -p ${DIR_OUT}/${configName}
 
 #for i in 20 22 40 42 44 ; do			# continuity

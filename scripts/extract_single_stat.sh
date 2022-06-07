@@ -7,11 +7,15 @@ OPTIONS=hc:r:e:s:t:
 #DIR_RESULT='C:\Users\frede\OneDrive\Desktop\CRAN2\CRAN2\CRAN2\simulations\results\'
 #DIR_RESULT="D:/PECSN_simulation_results/verification/continuity"
 #DIR_OUT='C:\Users\frede\OneDrive\Desktop\Risultati\'
+DIR_RESULT='C:\Users\frede\OneDrive\Desktop\CRAN2\CRAN2\CRAN2\simulations\results\'
+#DIR_RESULT="D:/PECSN_simulation_results/verification/continuity"
+DIR_OUT='C:\Users\frede\OneDrive\Desktop\Risultati\'
 #DIR_RESULT='C:\Users\frede\OneDrive\Desktop\PECSN\WholeResults\'
 #DIR_OUT='C:\Users\frede\OneDrive\Desktop\'
 DIR_RESULT="./CRAN2/CRAN2/simulations/results/"
 #DIR_RESULT="D:/PECSN_simulation_results/verification/continuity"
 DIR_OUT="./CRAN2/csv_results"
+
 
 
 usage() {
