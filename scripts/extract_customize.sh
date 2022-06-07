@@ -1,12 +1,12 @@
 #!/bin/bash
 
-repeat=25
+repeat=10
 fileExt=vec
 statType=vector
 OPTIONS=hc:r:s:
 DIR_RESULT="./CRAN2/CRAN2/simulations/results"
 #DIR_RESULT="D:/PECSN_simulation_results/verification/continuity"
-DIR_OUT="./CRAN2/csv_results"
+DIR_OUT="./../CRAN2/csv_results"
 
 usage() {
 cat << EOF
@@ -44,8 +44,8 @@ if [ -z $statistic ] ; then
 	exit 1
 fi
 
-mkdir -p ${DIR_OUT}/${configName}
 
+mkdir -p ${DIR_OUT}/${configName}
 
 #for i in 20 22 40 42 44 ; do			# continuity
 #for i in 3 7 10 16 20 ; do				# monotonicity cells
@@ -59,7 +59,6 @@ for i in 1.2 1.25 1.3 1.35 1.4; do		# datarate Mbps
 		#./scripts/extract_single_stat.sh -c "${configName}-${j}" -s ${statistic}		# fede
 		./CRAN2/scripts/extract_single_stat.sh -c "${configName}-${i},${j}" -s ${statistic}
 	done
-
 done
 
 exit 0
