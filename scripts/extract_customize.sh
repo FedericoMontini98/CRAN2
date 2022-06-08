@@ -6,7 +6,7 @@ statType=vector
 OPTIONS=hc:r:s:
 DIR_RESULT="./CRAN2/CRAN2/simulations/results"
 #DIR_RESULT="D:/PECSN_simulation_results/verification/continuity"
-DIR_OUT="./../CRAN2/csv_results"
+DIR_OUT="./CRAN2/csv_results"
 
 usage() {
 cat << EOF
@@ -51,9 +51,9 @@ mkdir -p ${DIR_OUT}/${configName}
 #for i in 20 23 30 ; do					# monotonicity dr
 #for i in 600 700 800 900 1000 1100 1200 1300 1400 1500 1600 1700 1800 ; do		# calibration_size
 #for i in 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 2 ; do		# calibration_speed
-for i in 1.2 1.25 1.3 1.35 1.4; do		# datarate Mbps
+for i in 7 7.03 7.06 ; do #`seq 6.55 0.1 7.2`; do		# datarate Mbps1.2 1.25 1.3 1.35 
 	# for j in `seq start step end (included)` ; do
-	for j in `seq 52 4 93` ; do	#10 12 14 16 18 20 22 24 26 28 30 ; do	# 32 34 36 38 40 42 44 46 48 50 ; do			# %compression
+	for j in `seq 0 10 31` ; do	#10 12 14 16 18 20 22 24 26 28 30 ; do	# 32 34 36 38 40 42 44 46 48 50 ; do			# %compression
 	# for j in 7.09 7.245 7.313 ; do
 		#./scripts/extract_single_stat.sh -c "${configName}-${j}" -s ${statistic}		# fede
 		./CRAN2/scripts/extract_single_stat.sh -c "${configName}-${i},${j}" -s ${statistic}
