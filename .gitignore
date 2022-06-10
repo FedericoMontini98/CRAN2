@@ -56,3 +56,5 @@ CRAN2/.qtenvrc
 /csv_results/
 /plots/
 /xlsx_results_dir/
+/scripts/*_v.sh
+/scripts/*_ema.sh
