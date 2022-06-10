@@ -1,3 +1,3 @@
-package cran2;
+package CRAN2.src;
 
 @license(LGPL);

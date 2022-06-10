@@ -13,7 +13,7 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package cran2;
+package CRAN2.src;
 
 simple AS
 {

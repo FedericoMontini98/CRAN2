@@ -1,3 +1,3 @@
-package cran2.simulations;
+package CRAN2.simulations;
 
 @license(LGPL);

@@ -13,13 +13,13 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package cran2.simulations;
+package CRAN2.simulations;
 
-import cran2.AS;
-import cran2.CellularSystem;
+import CRAN2.src.AS;
+import CRAN2.src.CellularSystem;
 
 
-network CRAN2
+network cran2
 {
     parameters:
     int N_cells;
