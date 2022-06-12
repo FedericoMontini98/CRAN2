@@ -39,7 +39,7 @@ class AS : public cSimpleModule
     int sizeDistribution = 0;
     int timeDistribution = 0;
 
-    //Message to notify to the AS to start another packet generation
+    //Message to notify to the AS to start another packet generation -> timer
     cMessage *generate;
 
 

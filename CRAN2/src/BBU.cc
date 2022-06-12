@@ -19,11 +19,11 @@ Define_Module(BBU);
 
 void BBU::initialize()
 {
-    //Initializations
-    tx_channel = NULL;  //gate("out")->getTransmissionChannel();
+    // Initializations
+    tx_channel = NULL;
     pkt_queue = new cPacketQueue();
     timer_ = new cMessage();
-    in_transit = false;
+    in_transit = false;     // at the beginnig, the channel is idle
     gate_size = gateSize("out");
     //EV << gate_size << " gate_size" << endl;
 
@@ -34,51 +34,44 @@ void BBU::initialize()
     pkt_in_queue_ = registerSignal("packetInQueue");
     pkt_in_bbu_ = registerSignal("packetInBBU");
 
-    //Now idle, until AS sends a new packet
+    // now idle, until AS sends a new packet
 }
 
-//Function that receives AS packets and forward them to the RRH, the packet may be inside the queue, from which we take it using a FIFO policy or,
-//if the queue is empty, we may go idle of queue is empty or forward the packet that has been just sent from the AS
+/*
+ * receives AS packets and forwards them to the RRHs
+ * two options: the message can arrive from the AS or from the BBU itself
+ * packetQueue handled using a FIFO policy
+ */
 void BBU::handleMessage(cMessage *msg)
 {
-    //Two options: The message can arrive from the AS or from the BBU itself
-    //If the packet is a self message the service the actual packet that was in transmission has been sent, we can proceed with the next packet
-    if(msg->isSelfMessage()) {
-        // Check on the state of the channel
+    if(msg->isSelfMessage()) {      // timer message, from itself
         in_transit = tx_channel->isBusy();
-        if(in_transit) {
-            // If the channel is still busy -> fix the timer
+        if(in_transit) {    // channel is still busy -> reschedule the timer
             cancelEvent(msg);
             scheduleAt(tx_channel->getTransmissionFinishTime(), timer_);
-        }
-        // Pop a packet from the queue and forward to the RRH
-        else if(pkt_queue->getLength() > 0) {
+        } else if(pkt_queue->getLength() > 0) {   // idle channel: if there is at least one packet queued, pop it and forward to the RRH
             in_transit = true;
             cPacket *pkt= pkt_queue->pop();
             sendPacket(pkt);
         }
-    }
-    // Otherwise the packet came from the AS and we have to understand if the channel is free or busy with another packet transmission
-    else {
-        //Cast of a cMessage to a PktMessage
-        PktMessage *pkt = check_and_cast<PktMessage*>(msg);
-        pkt->setTimestamp();
+    } else {   // new packet from the AS
+        PktMessage *pkt = check_and_cast<PktMessage*>(msg);     // message cast to PktMessage type
+        pkt->setTimestamp();    // timestamp used to compute the queueing time, set to the current sim-time
 
-        //Emit of the number of packets statistic
-        long queue_length = static_cast<long>(pkt_queue->getByteLength());
-        emit(pkt_in_bbu_, pkt_queue->getLength() + (int)in_transit);
+        long queue_length = static_cast<long>(pkt_queue->getByteLength());  // queue length in bytes
+        emit(pkt_in_bbu_, pkt_queue->getLength() + (int)in_transit);        // number of packet in the BBU
 
-        //The packet is queued only if the transmitted channel is busy or there are other packets in the queue
+        // the packet is queued only if the transmitted channel is busy or there are other packets in the queue
         if(in_transit || !pkt_queue->isEmpty()) {
             pkt_queue->insert(pkt);
-            /*EV << simTime() << " insert in queue" << endl;*/
-        } else {
-            // idle channel and empty queue, we can forward it to the RRH
+            // EV << simTime() << " insert in queue" << endl;
+
+        } else { // idle channel and empty queue -> new packet sent to the RRH without queueing
             EV << simTime() << " empty queue " << endl;
             in_transit = true;
             sendPacket(pkt);
         }
-        emit(occupation_queue_, queue_length);
+        emit(occupation_queue_, queue_length);      // signal for queue length in bytes
     }
 }
 
@@ -90,51 +83,55 @@ void BBU::finish()
     delete pkt_queue;
 }
 
-//Function that perform the packet compression with the chosen ratio "compression_ratio"
+/*
+ * function for the compression of a packet, using the given level "compression_ratio"
+ */
 int BBU::compressPacket(cPacket *pkt) {
     int new_size = ceil(pkt->getByteLength() * (1 - par("compression_ratio").doubleValue() / 100));
     pkt->setByteLength(new_size);
     return new_size;
 }
 
-//Function that perform the forwarding of the packet to the RRH
+/*
+ * forwards of the packet to the correct RRH,
+ * records some statistics,
+ * calls the compression function,
+ * schedules a new timer
+ */
 void BBU::sendPacket(cMessage *msg) {
     emit(pkt_in_queue_, pkt_queue->getLength());
     PktMessage *pkt = check_and_cast<PktMessage*>(msg);
-    //Extract the target cell
-    int index_gate = pkt->getTarget_cell();
-    // Check the existence of that cell
-    if(index_gate < 0 || index_gate >= gate_size) {
+
+    int index_gate = pkt->getTarget_cell();     // read the target cell
+
+    if(index_gate < 0 || index_gate >= gate_size) {     // if the target cell does not exists -> error
         error("BBU: no corresponding target gate");
     }
 
-    tx_channel = gate("out", index_gate)->getTransmissionChannel();
+    tx_channel = gate("out", index_gate)->getTransmissionChannel();     // reference to the busy channel towards RRH
 
     simtime_t queueing_t = simTime() - pkt->getTimestamp();
     emit(queueing_time_, queueing_t);
 
-    //If the compression is enabled perform it
-    if(par("compression_enabled").boolValue()) {
-
+    if(par("compression_enabled").boolValue()) {    // if compression enabled -> compress the packet
         int new_size = compressPacket(pkt);
         EV << "size compressed: " << new_size << endl;
     }
-    simtime_t duration = tx_channel->calculateDuration(pkt);
+    simtime_t duration = tx_channel->calculateDuration(pkt);    // the trasmission duration corresponds to the BBU service time
     simtime_t response_t = queueing_t + duration;
 
-    EV << "response_time: " << response_t << ", duration: " << duration <<endl;
-    EV << simTime() << " time before send " << endl;
+    // EV << "response_time: " << response_t << ", duration: " << duration <<endl;
+    // EV << simTime() << " time before send " << endl;
 
     send(pkt, "out", index_gate);
     emit(response_time_, response_t);
     in_transit = tx_channel->isBusy();
     simtime_t finish_time_ = tx_channel->getTransmissionFinishTime();
 
-    EV << finish_time_ << " time after send" << endl;
-    EV << simTime() + duration << " simTime + duration" << endl;
+    // EV << finish_time_ << " time after send" << endl;
+    // EV << simTime() + duration << " simTime + duration" << endl;
 
-    //If the time needed to forward is larger than the time left for the simulation
-    if(finish_time_ < simTime()) {
+    if(finish_time_ < simTime()) {      // "synchronize" the timer with the sim-time
         finish_time_ = simTime();
     }
     scheduleAt(finish_time_, timer_);

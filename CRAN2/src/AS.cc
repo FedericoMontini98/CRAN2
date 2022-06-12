@@ -24,9 +24,9 @@ void AS::initialize()
 
     sizeMean = par("sizeMean");
 
-    //Checking the positivity
+    //Checking the validity
     if(sizeMean < 0){
-        error("Error in  Size Mean Value Extraction: The value is negative");
+        error("Error in Size Mean Value Extraction: The value is negative");
     }
 
     sizeVariance = par("sizeVariance");
@@ -42,13 +42,13 @@ void AS::initialize()
     sizeDistribution = par("sizeDistribution").intValue();
     timeDistribution = par("timeDistribution").intValue();
 
-    // System initialization: Create a message that simulate the generation of a new packet, this packet will be sent from the AS to the AS itself
+    // System initialization: Create a message that simulate the generation of a new packet -> represents a timer
     generate = new cMessage();
     generate_delay();
 }
 
-//Function that is activated after the generation time. It needs to create and prepare a packet to send on the "out" link to the BBU
-//After the forwarding is done will call generate_delay to 'generate' another packet
+// Function that is activated after the generation time. It needs to create and prepare a packet to send on the "out" link to the BBU
+// After the forwarding is done will call generate_delay to 'generate' another packet
 void AS::handleMessage(cMessage *msg)
 {
     int size;

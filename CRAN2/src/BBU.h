@@ -24,15 +24,14 @@ using namespace omnetpp;
 
 class BBU : public cSimpleModule
 {
-    cPacketQueue *pkt_queue;
-    cChannel *tx_channel;
-    cMessage *timer_;
-    bool in_transit;
+    cPacketQueue *pkt_queue;    // for queueing cPacket with a specified byte length
+    cChannel *tx_channel;       // data-rate channel towards RRHs
+    cMessage *timer_;       // notify when the channel is idle for another sending
 
-    //Number of RRH/cell pairs: Used to check that the destination cell really exists
-    int gate_size;
+    bool in_transit;    // indicates if the channel is busy or idle
+    int gate_size;      // number of RRH-cell pairs: to check if the destination cell really exists
 
-    //Signals
+    // Signals
     simsignal_t occupation_queue_;
     simsignal_t queueing_time_;
     simsignal_t response_time_;
