@@ -19,9 +19,12 @@ Define_Module(AS);
 
 void AS::initialize()
 {
+    //Parameters initialization
     numTarget = par("N_target").intValue();
 
     sizeMean = par("sizeMean");
+
+    //Checking the positivity
     if(sizeMean < 0){
         error("Error in  Size Mean Value Extraction: The value is negative");
     }
@@ -39,23 +42,26 @@ void AS::initialize()
     sizeDistribution = par("sizeDistribution").intValue();
     timeDistribution = par("timeDistribution").intValue();
 
-    // Create a msg
+    // System initialization: Create a message that simulate the generation of a new packet, this packet will be sent from the AS to the AS itself
     generate = new cMessage();
     generate_delay();
 }
 
-//Function that is activated after the waiting time. It needs to create and prepare a packet to send on the "out" link to the BBU
-//After the send is done will call generate_delay to have another wait time
+//Function that is activated after the generation time. It needs to create and prepare a packet to send on the "out" link to the BBU
+//After the forwarding is done will call generate_delay to 'generate' another packet
 void AS::handleMessage(cMessage *msg)
 {
     int size;
 
-    // Generating a "random" size for the packet
-    if(sizeDistribution == 1) {  // exponential
+    // Generating a size for the packet with a proper distribution
+    if(sizeDistribution == 1) {
+        // exponential
         size = (int)exponential(sizeMean, SIZE_RNG);
-    } else if(sizeDistribution == 0) {  // lognormal
+    } else if(sizeDistribution == 0) {
+        // log-normal
         size = (int)lognormal(sizeMean, sizeVariance, SIZE_RNG);
-    } else {    // constant
+    } else {
+        // constant
         size = sizeMean;
     }
 
@@ -74,19 +80,22 @@ void AS::handleMessage(cMessage *msg)
 void AS::generate_delay() {
     simtime_t time;
 
-    if(timeDistribution == 1) {  // exponential
+    //Exponential case: In our project is the only one that we needed to evaluate
+    if(timeDistribution == 1) {
         //Generating a "random" amount of time to wait
         time = (simtime_t)exponential(timeMean, TIME_RNG);
-    } else {    // constant
+    }
+    else {
+        // constant generating time
         time = timeMean;
     }
 
-    // Send to myself a msg to notify that i have to send a packet to the BBU
+    // Send to itself a msg to simulate that the packet generation has been completed
     scheduleAt(simTime() + time, generate);
     EV << "generated time: " << time << endl;
 }
 
-//Function to stop the packet generation
+//Function that end the packet generation
 void AS::finish() {
     cancelAndDelete(generate);
 }

@@ -29,8 +29,10 @@ class BBU : public cSimpleModule
     cMessage *timer_;
     bool in_transit;
 
+    //Number of RRH/cell pairs: Used to check that the destination cell really exists
     int gate_size;
 
+    //Signals
     simsignal_t occupation_queue_;
     simsignal_t queueing_time_;
     simsignal_t response_time_;
