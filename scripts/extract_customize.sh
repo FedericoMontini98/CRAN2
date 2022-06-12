@@ -1,11 +1,16 @@
 #!/bin/bash
 
+# shell script to customize, for extracting statistics, given a configuration name and a statistic name 
+# and some other optional parameters
+
+# used to extract similar configuration results, modified each time
+
+# edit the folder name where you want to save the extracted files (DIR_OUT) or customize as nedeed
+
 repeat=10
 fileExt=vec
 statType=vector
 OPTIONS=hc:r:s:
-DIR_RESULT="./CRAN2/CRAN2/simulations/results"
-#DIR_RESULT="D:/PECSN_simulation_results/verification/continuity"
 DIR_OUT="./CRAN2/csv_results"
 
 usage() {
@@ -44,7 +49,7 @@ if [ -z $statistic ] ; then
 	exit 1
 fi
 
-mkdir -p ${DIR_OUT}/${configName}
+mkdir -p ${DIR_OUT}/${configName}		# create a folder with the same name of the configuration (but don't save there the results automatically)
 
 # nested for
 #for i in 20 22 40 42 44 ; do			# continuity

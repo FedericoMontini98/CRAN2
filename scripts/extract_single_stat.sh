@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# shell script to extract one single statistic, given the statistic name and a configuration name
+
+# edit the folder name of the simulation results (DIR_RESULT) 
+# and the folder where you want to save the extracted files (DIR_OUT)
+
+
 repeat=25
 fileExt=vec
 statType=vector
