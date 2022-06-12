@@ -4,15 +4,9 @@ repeat=25
 fileExt=vec
 statType=vector
 OPTIONS=hc:r:e:s:t:
-#DIR_RESULT='C:\Users\frede\OneDrive\Desktop\CRAN2\CRAN2\CRAN2\simulations\results\'
-#DIR_OUT='C:\Users\frede\OneDrive\Desktop\Risultati\'
-#DIR_RESULT='C:\Users\frede\OneDrive\Desktop\PECSN\WholeResults\'
-#DIR_OUT='C:\Users\frede\OneDrive\Desktop\'
-DIR_RESULT="./CRAN2/CRAN2/simulations/results/"
+DIR_RESULT="C:\Users\Emanuele\Desktop\Projects\C-RAN2 Main\CRAN2\CRAN2\simulations\results"
 #DIR_RESULT="D:/PECSN_simulation_results/verification/continuity"
-DIR_OUT="./CRAN2/csv_results"
-
-
+DIR_OUT="C:\Users\Emanuele\Desktop\Projects\C-RAN2 Main\results\csv"
 
 usage() {
 cat << EOF
@@ -55,6 +49,6 @@ fi
 
 path=$DIR_RESULT${configName}
 
-scavetool export --type v -o "${DIR_OUT}/${configName}_${statistic}.csv" -F CSV-S -v -x precision=14 -x separator=semicolon -f ${statistic}:$statType $path*.${fileExt}
+scavetool export --type v -o ${DIR_OUT}/${configName}_${statistic}.csv -F CSV-S -v -x precision=14 -x separator=semicolon -f ${statistic}:$statType $path*.${fileExt}
 
 exit 0

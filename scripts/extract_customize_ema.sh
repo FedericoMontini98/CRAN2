@@ -3,17 +3,11 @@
 repeat=25
 fileExt=vec
 statType=vector
-OPTIONS=hc:r:e:s:t:
-#DIR_RESULT='C:\Users\frede\OneDrive\Desktop\CRAN2\CRAN2\CRAN2\simulations\results\'
-#DIR_OUT='C:\Users\frede\OneDrive\Desktop\Risultati\'
-#DIR_RESULT='C:\Users\frede\OneDrive\Desktop\PECSN\WholeResults\'
-#DIR_OUT='C:\Users\frede\OneDrive\Desktop\'
-DIR_RESULT="./CRAN2/CRAN2/simulations/results/"
+OPTIONS=hc:r:s:
+DIR_RESULT="C:/Users/Emanuele/Desktop/Projects/C-RAN2 Main/CRAN2/CRAN2/simulations/results"
 #DIR_RESULT="D:/PECSN_simulation_results/verification/continuity"
-DIR_OUT="./CRAN2/csv_results"
-
-
-
+DIR_OUT="C:/Users/Emanuele/Desktop/Projects/C-RAN2 Main/results"
+echo a
 usage() {
 cat << EOF
 Collect statistics from OMNET++
@@ -21,12 +15,11 @@ Collect statistics from OMNET++
 -h          help
 -c          name of the configuration
 -r          number of repetitions (default 25)
--e          extension of the file (default vec)
 -s          statistics to collect
--t          type of the statistics (defaul vector)
 
 EOF
 }
+
 
 # Parse command line
 while getopts $OPTIONS opt ; do
@@ -34,9 +27,7 @@ while getopts $OPTIONS opt ; do
 	h ) usage ; exit 0 ;;
 	c ) configName=$OPTARG ;;
 	r ) repeat=$OPTARG ;;
-	e ) fileExt=$OPTARG ;;
 	s ) statistic=$OPTARG ;;
-    t ) statType=$OPTARG ;;
 	esac
 done
 shift $(($OPTIND-1))
@@ -53,8 +44,18 @@ if [ -z $statistic ] ; then
 	exit 1
 fi
 
-path=$DIR_RESULT${configName}
+mkdir -p ${DIR_OUT}/${configName}
 
-scavetool export --type v -o "${DIR_OUT}/${configName}_${statistic}.csv" -F CSV-S -v -x precision=14 -x separator=semicolon -f ${statistic}:$statType $path*.${fileExt}
+for j in 0.1 0.5 ; do
+	for i in 30 60 ; do
+		for k in 1.1 3.7 ; do
+			for m in 7 18 ; do
+				for n in 0.01 0.02 ; do    
+    				echo ./CRAN2/scripts/extract_single_stat_ema.sh -c "${configName}-${j},${i},${k},${m},${n}-" -s ${statistic}
+				done
+			done
+		done
+	done	
+done
 
 exit 0
