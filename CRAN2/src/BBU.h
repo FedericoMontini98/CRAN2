@@ -24,7 +24,7 @@ using namespace omnetpp;
 
 class BBU : public cSimpleModule
 {
-    cPacketQueue *pkt_queue;    // for queueing cPacket with a specified byte length
+    cPacketQueue *pkt_queue;    // queue for queueing cPacket with a specified byte length
     cChannel *tx_channel;       // data-rate channel towards RRHs
     cMessage *timer_;       // notify when the channel is idle for another sending
 

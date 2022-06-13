@@ -21,8 +21,8 @@
 
 using namespace omnetpp;
 
-/**
- * TODO - Generated class
+/*
+ * module to collect the final statistics
  */
 class Cell : public cSimpleModule
 {

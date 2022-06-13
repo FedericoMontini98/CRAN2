@@ -47,8 +47,11 @@ void AS::initialize()
     generate_delay();
 }
 
-// Function that is activated after the generation time. It needs to create and prepare a packet to send on the "out" link to the BBU
-// After the forwarding is done will call generate_delay to 'generate' another packet
+/*
+ * function executed after the generation time
+ * create and prepare a packet to send on the "out" link to the BBU
+ * after the forwarding, call generate_delay to 'generate' another packet
+ */
 void AS::handleMessage(cMessage *msg)
 {
     int size;
@@ -65,28 +68,25 @@ void AS::handleMessage(cMessage *msg)
         size = sizeMean;
     }
 
-    // Create a new packet with size and the cell to reach in the interval [0, N-1]
+    // create a new packet with specified bytes size and destination cell in the interval [0, N-1]
     PktMessage* pkt = new PktMessage();
     pkt->setByteLength(size);
     pkt->setTarget_cell(intuniform(0, numTarget-1, TARGET_RNG));
 
-    // Send the generated pkt on the "out" link, also the only one available
-    send(pkt, "out");
-    //I proceed to wait another pkt generation cycle
-    generate_delay();
+    send(pkt, "out");   // send the message to the BBU (only one link)
+    generate_delay();   // generation of the waitin time for another new packet
 }
 
-//Function that generate an amount of time to wait between the creation of two packets to send to the BBU
+/*
+ * function that generate an amount of time to wait between the creation of two packets to send to the BBU
+ */
 void AS::generate_delay() {
     simtime_t time;
 
-    //Exponential case: In our project is the only one that we needed to evaluate
-    if(timeDistribution == 1) {
-        //Generating a "random" amount of time to wait
+    if(timeDistribution == 1) { // exponential case: the only one actually evaluated
+        // generating a "random" amount of time to wait
         time = (simtime_t)exponential(timeMean, TIME_RNG);
-    }
-    else {
-        // constant generating time
+    } else { // constant generating time
         time = timeMean;
     }
 
@@ -95,7 +95,6 @@ void AS::generate_delay() {
     EV << "generated time: " << time << endl;
 }
 
-//Function that end the packet generation
 void AS::finish() {
     cancelAndDelete(generate);
 }

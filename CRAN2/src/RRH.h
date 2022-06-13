@@ -25,14 +25,11 @@ using namespace omnetpp;
 class RRH : public cSimpleModule
 {
     cMessage* timer_ = nullptr;
-    //RRH queue (packets waiting the "decompression unit")
-    std::queue <PktMessage*> queue;
-    //Boolean that represents if the "decompression unit" is in use
-    bool dec_unit_in_use = false;
-    //Pointer to the packet in the "decompression unit"
-    PktMessage* pkt_in_dec = nullptr;
+    std::queue <PktMessage*> queue;     // RRH queue: needed when the "decompression unit" is active, to queue arriving packets
+    bool dec_unit_in_use = false;       // indicate if the decompression is active or not
+    PktMessage* pkt_in_dec = nullptr;    // pointer to the packet in the "decompression unit"
 
-    //Signals
+    // Signals
     simsignal_t packet_in_rrh_;
     simsignal_t packet_in_queue_;
     simsignal_t queueing_time_;

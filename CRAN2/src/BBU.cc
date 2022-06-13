@@ -84,7 +84,7 @@ void BBU::finish()
 }
 
 /*
- * function for the compression of a packet, using the given level "compression_ratio"
+ * function for compression of a packet, using the given level "compression_ratio"
  */
 int BBU::compressPacket(cPacket *pkt) {
     int new_size = ceil(pkt->getByteLength() * (1 - par("compression_ratio").doubleValue() / 100));
@@ -117,7 +117,7 @@ void BBU::sendPacket(cMessage *msg) {
         int new_size = compressPacket(pkt);
         EV << "size compressed: " << new_size << endl;
     }
-    simtime_t duration = tx_channel->calculateDuration(pkt);    // the trasmission duration corresponds to the BBU service time
+    simtime_t duration = tx_channel->calculateDuration(pkt);    // the transmission duration corresponds to the BBU service time
     simtime_t response_t = queueing_t + duration;
 
     // EV << "response_time: " << response_t << ", duration: " << duration <<endl;
@@ -129,7 +129,6 @@ void BBU::sendPacket(cMessage *msg) {
     simtime_t finish_time_ = tx_channel->getTransmissionFinishTime();
 
     // EV << finish_time_ << " time after send" << endl;
-    // EV << simTime() + duration << " simTime + duration" << endl;
 
     if(finish_time_ < simTime()) {      // "synchronize" the timer with the sim-time
         finish_time_ = simTime();

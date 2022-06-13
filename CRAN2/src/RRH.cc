@@ -26,32 +26,32 @@ void RRH::initialize()
     response_time_ = registerSignal("rrhResponseTime");
 }
 
+/*
+ * receive a new message from the BBU
+ * or a self_message that indicates that the decompression of a packet is terminated
+ */
 void RRH::handleMessage(cMessage *msg)
 {
-    //Two cases: if a packet ended the decompression or has been sent by the BBU
     if(msg->isSelfMessage()) {
-        //Decompression ended -> the "decompression unit" is free
-        dec_unit_in_use = false;
-        //The packet is forwarded to the cell
-        forwardPkt();
+        dec_unit_in_use = false;    // "decompression unit" is free
+        forwardPkt();        // packet forwarded to the cell
 
         if(queue.size() > 0)
             decompressPkt();
 
-    } else {
-        // new packet from bbu
-        // E[N]_rrh
-        long num_pkt = static_cast<long>(queue.size() + (int)dec_unit_in_use);
-        emit(packet_in_rrh_, num_pkt);
+    } else { // new packet from bbu
 
-        //The new packet is pushed in queue
+        long num_pkt = static_cast<long>(queue.size() + (int)dec_unit_in_use);
+        emit(packet_in_rrh_, num_pkt);        // E[N]_rrh
+
+        // new packet pushed in queue
         PktMessage* new_pkt = check_and_cast<PktMessage*>(msg);
         new_pkt->setTimestamp();
         queue.push(new_pkt);
 
-        //If the "decompression unit" is free and a packet is waiting for it
+        // if the "decompression unit" is free and a packet is waiting for it
         if(queue.size() == 1 && !dec_unit_in_use) {
-            //The first packet in queue begin the decompression
+            // the first packet in queue begin the (possible) decompression and transmission
             decompressPkt();
         }
     }
@@ -69,16 +69,20 @@ void RRH::finish() {
     delete pkt_in_dec;
 }
 
-//Function that forwards the packet to the cell connected to the RRH
+/*
+ * function that forwards the packet to the cell connected to the RRH
+ */
 void RRH::forwardPkt()
 {
-    //The message pointed by pkt_in_dec was decompressed and is ready to be sent
+    // the message pointed by pkt_in_dec was decompressed and is ready to be sent
     PktMessage *to_transmit = pkt_in_dec;
     pkt_in_dec = nullptr;
     send(to_transmit, "out");
 }
 
-//Function that simulates the "decompression unit"
+/*
+ * function that simulates the "decompression unit"
+ */
 void RRH::decompressPkt()
 {
     //The "decompression unit" is now in use
@@ -94,14 +98,14 @@ void RRH::decompressPkt()
 
     simtime_t decompression_time = 0;
 
-    //Check if the decompression is in use
+    // if the decompression is enabled -> get the needed parameters and perform the packet decompression
     if(par("compression_used").boolValue()) {
-        //Get the alfa parameter
-        double alfa = par("alfa").doubleValue();
-        //Calculate the decompression time
+
+        double alfa = par("alfa").doubleValue();    // proportionality constant
+        // compute the decompression time
         double to_wait = (alfa * 50) * (par("compression_ratio").doubleValue());
         decompression_time = SimTime(to_wait, (SimTimeUnit)-3);
-        //The size of the packet is set back to its original value
+        // the size of the packet is set back to its original value
         int new_size = ceil(pkt_in_dec->getByteLength() / (1 - par("compression_ratio").doubleValue() / 100));
         pkt_in_dec->setByteLength(new_size);
 
