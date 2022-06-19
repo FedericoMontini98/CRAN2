@@ -30,7 +30,7 @@ void AS::initialize()
     }
 
     sizeVariance = par("sizeVariance");
-    if(timeMean < 0){
+    if(sizeVariance < 0){
         error("Error in Size Variance Value Extraction: The value is negative");
     }
 
