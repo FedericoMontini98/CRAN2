@@ -51,7 +51,7 @@ void RRH::handleMessage(cMessage *msg)
 
         // if the "decompression unit" is free and a packet is waiting for it
         if(queue.size() == 1 && !dec_unit_in_use) {
-            // the first packet in queue begin the (possible) decompression and transmission
+            // the first packet in queue begins the (possible) decompression and transmission
             decompressPkt();
         }
     }

@@ -74,11 +74,11 @@ void AS::handleMessage(cMessage *msg)
     pkt->setTarget_cell(intuniform(0, numTarget-1, TARGET_RNG));
 
     send(pkt, "out");   // send the message to the BBU (only one link)
-    generate_delay();   // generation of the waitin time for another new packet
+    generate_delay();   // generation of the waiting time for another new packet
 }
 
 /*
- * function that generate an amount of time to wait between the creation of two packets to send to the BBU
+ * function that generates an amount of time to wait between the creation of two packets to send to the BBU
  */
 void AS::generate_delay() {
     simtime_t time;
