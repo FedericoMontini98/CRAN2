@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# shell script to extract each repetition individually, given the configuration name and the statistic name to collect
+# and other optional argument, like the number of repetitions
+
+# edit the folder name of the simulation results (DIR_RESULT) 
+# and the folder where you want to save the extracted files (DIR_OUT)
+
 repeat=25
 fileExt=vec
 statType=vector
@@ -19,28 +25,6 @@ Collect statistics from OMNET++
 -s          statistics to collect
 -t          type of the statistics (defaul vector)
 
-EOF
-}
-
-
-fix_csv() {
-input_csv=$1
-python << EOF
-import pandas as pd
-df = pd.read_csv("$input_csv", sep=';')
-names = []
-for col in df.columns:
-	if col.startswith('Unnamed'):
-		pass
-	else:
-		names.append(col.split('[')[1][0])
-new_cols = []
-for name in names:
-	for i in range(2):
-		init = 'timestamp' if i == 0 else 'values'
-		new_cols.append(init+name)
-df.columns = new_cols
-df.to_csv("$input_csv", sep=';', index=False)
 EOF
 }
 
@@ -77,7 +61,7 @@ for file_id in `seq $repeat` ; do
 
 	#echo "scavetool export --type v -o ${DIR_OUT}/${configName}_*#${file_id}_${statistic}.csv -F CSV-S -v -x precision=14 -x separator=semicolon -f ${statistic}:$statType $path"
 	scavetool export --type v -o ${DIR_OUT}/${configName}_${statistic}_#${file_id}.csv -F CSV-S -v -x precision=14 -x separator=semicolon -f ${statistic}:$statType $path
-	#fix_csv ${DIR_OUT}/${configName}_${file_id}_delay.csv
+
 done
 #done
 
